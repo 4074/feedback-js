@@ -1,24 +1,25 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+const autoprefixer = require('autoprefixer')
 const packageJson = require('./package.json')
 
-module.exports = {
-  // mode: 'production',
+module.exports = (env = {}) => ({
+  mode: env.production ? 'production' : 'development',
 
   entry: {
-    analytics: './src/analytics'
+    feedback: './src/index'
   },
 
   output: {
-    filename: `[name]-${packageJson.version}.js`,
+    filename: env.production ? `[name]-${packageJson.version}.js` : '[name].js',
     path: path.resolve(__dirname, 'build')
   },
 
-  // devtool: 'inline-source-map',
+  devtool: env.production ? 'cheap-source-map' : 'inline-source-map',
 
   resolve: {
-    extensions: [".wasm", ".ts", ".tsx", ".mjs", ".cjs", ".js", ".json"]
+    extensions: [".ts", ".js", ".json"]
   },
 
   module: {
@@ -26,7 +27,23 @@ module.exports = {
       {
         test: /.ts$/,
         loader: 'babel-loader'
-      }
+      },
+      {
+        test: /\.s(a|c)ss$/,
+        use: [
+            'style-loader',
+            'css-loader',
+            {
+                loader: 'postcss-loader',
+                options: {
+                    plugins: [
+                        autoprefixer()
+                    ]
+                }
+            },
+            'sass-loader'
+        ]
+    }
     ]
   },
 
@@ -35,10 +52,10 @@ module.exports = {
       template: 'index.html',
       inject: 'head'
     }),
-    new CleanWebpackPlugin()
+    ...(env.production? [new CleanWebpackPlugin()] : [])
   ],
   devServer: {
     host: '0.0.0.0',
     port: 8000
   }
-}
+})

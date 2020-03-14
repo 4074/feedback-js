@@ -1,8 +1,4 @@
-export interface AnalyticsRequest {
-  send: (data: any) => void
-}
-
-export default class Request implements AnalyticsRequest {
+export default class Request implements Model.Request {
   send = (data: any): void => {
     console.log(data)
   }
