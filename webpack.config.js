@@ -4,7 +4,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const packageJson = require('./package.json')
 
 module.exports = {
-  mode: 'production',
+  // mode: 'production',
 
   entry: {
     analytics: './src/analytics'
@@ -18,7 +18,7 @@ module.exports = {
   // devtool: 'inline-source-map',
 
   resolve: {
-    extensions: ['.ts']
+    extensions: [".wasm", ".ts", ".tsx", ".mjs", ".cjs", ".js", ".json"]
   },
 
   module: {
@@ -36,5 +36,9 @@ module.exports = {
       inject: 'head'
     }),
     new CleanWebpackPlugin()
-  ]
+  ],
+  devServer: {
+    host: '0.0.0.0',
+    port: 8000
+  }
 }
