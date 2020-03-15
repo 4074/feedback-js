@@ -29,7 +29,7 @@ class Trigger {
     this.$element.parentElement.removeChild(this.$element)
   }
 
-  onClick(fn: () => any): void {
+  onClick(fn: (event: MouseEvent) => any): void {
     if (!this.$element) return
     this.$element.addEventListener('click', fn)
   }

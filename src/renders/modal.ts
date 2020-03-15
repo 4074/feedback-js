@@ -1,7 +1,16 @@
+import { requestAnimationFrame } from '../utils'
 import './modal.scss'
 
 class Modal {
   private $element: HTMLDivElement
+
+  private $wrap: HTMLDivElement
+
+  private $mask: HTMLDivElement
+
+  private hiding = false
+
+  private showing = false
 
   maskClosable = true
 
@@ -27,10 +36,14 @@ class Modal {
       </div>
     `
 
-    const $mask = this.$element.querySelector('.feedback-modal-mask')
-    if ($mask) {
-      $mask.addEventListener('click', this.handleMask)
-    }
+    this.$wrap = this.$element.querySelector(
+      '.feedback-modal-wrap'
+    ) as HTMLDivElement
+
+    this.$mask = this.$element.querySelector(
+      '.feedback-modal-mask'
+    ) as HTMLDivElement
+    this.$mask.addEventListener('click', this.handleMask)
 
     const $close = this.$element.querySelector('.feedback-modal-close')
     if ($close) {
@@ -40,14 +53,50 @@ class Modal {
     parent.appendChild(this.$element)
   }
 
-  show = (): void => {
-    if (!this.$element) return
+  show = (origin: { x: number; y: number } | null): void => {
+    if (!this.$element || this.showing || this.hiding) return
+    this.showing = true
+
+    if (origin) {
+      this.$wrap.style.transformOrigin = `${origin.x}px ${origin.y}px`
+    }
     this.$element.style.display = 'block'
+    this.$wrap.classList.add('enter-start')
+    this.$mask.classList.add('enter-start')
+
+    requestAnimationFrame(() => {
+      this.$wrap.classList.add('enter-end')
+      this.$mask.classList.add('enter-end')
+    })
+
+    setTimeout(() => {
+      this.$wrap.classList.remove('enter-start')
+      this.$wrap.classList.remove('enter-end')
+      this.$mask.classList.remove('enter-start')
+      this.$mask.classList.remove('enter-end')
+      this.showing = false
+    }, 300)
   }
 
   hide = (): void => {
-    if (!this.$element) return
-    this.$element.style.display = 'none'
+    if (!this.$element || this.hiding || this.showing) return
+    this.hiding = true
+    this.$wrap.classList.add('leave-start')
+    this.$mask.classList.add('leave-start')
+
+    requestAnimationFrame(() => {
+      this.$wrap.classList.add('leave-end')
+      this.$mask.classList.add('leave-end')
+    })
+
+    setTimeout(() => {
+      this.$wrap.classList.remove('leave-start')
+      this.$wrap.classList.remove('leave-end')
+      this.$mask.classList.remove('leave-start')
+      this.$mask.classList.remove('leave-end')
+      this.$element.style.display = 'none'
+      this.hiding = false
+    }, 300)
   }
 
   remove = (): void => {

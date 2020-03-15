@@ -30,8 +30,8 @@ export default class Feedback {
     modal.render(document.body)
   }
 
-  handleTrigger = (): void => {
-    modal.show()
+  handleTrigger = (event: MouseEvent): void => {
+    modal.show({ x: event.pageX, y: event.pageY })
   }
 
   send = (data: any): void => {
