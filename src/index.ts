@@ -1,12 +1,31 @@
 /* eslint-disable class-methods-use-this */
 import Request from './request'
-import trigger from './renders/trigger'
-import modal from './renders/modal'
+import Component from './renders'
+import { deepExtends } from './utils'
+
+const defaults: FeedbackOptions = {
+  messages: {
+    title: '意见反馈',
+    labels: {
+      input: '您遇到的问题、意见或建议',
+      image: '可附上相关截图（最多添加3张）'
+    },
+    placeholders: {
+      input: '请输入',
+      image: '上传或粘贴图片'
+    },
+    footer: '还可以直接我们：XXX'
+  }
+}
 
 export default class Feedback {
   private request: Model.Request
 
   private app?: Model.App
+
+  private componet?: Component
+
+  private options: FeedbackOptions = {}
 
   readonly window: Window
 
@@ -15,23 +34,11 @@ export default class Feedback {
     this.request = new Request()
   }
 
-  init(id: string): void {
+  init(id: string, options: FeedbackOptions = {}): void {
+    this.options = deepExtends(defaults, options)
     this.app = { id }
-    this.initTrigger()
-    this.initModal()
-  }
-
-  initTrigger(): void {
-    trigger.render(document.body)
-    trigger.onClick(this.handleTrigger)
-  }
-
-  initModal(): void {
-    modal.render(document.body)
-  }
-
-  handleTrigger = (event: MouseEvent): void => {
-    modal.show({ x: event.pageX, y: event.pageY })
+    this.componet = new Component(options)
+    this.componet.render(this.options.container || document.body)
   }
 
   send = (data: any): void => {

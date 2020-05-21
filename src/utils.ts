@@ -19,3 +19,26 @@ export function requestAnimationFrame(fn: () => void): void {
     setTimeout(fn, 17)
   }
 }
+
+export function deepExtends<T extends object>(defaults: T, custom: T): T {
+  // const result = {}
+  // function dfs(data: any) {
+  //   for (const key of Object.keys(data)) {
+  //   }
+  // }
+  return defaults || custom
+}
+
+export function setDeepValue(source: object, keys: string[], value: any): void {
+  let node: any = source
+  let parent: any = source
+  let index = 0
+
+  while (node && typeof node === 'object' && index < keys.length) {
+    parent = node
+    node = node[keys[index]]
+    index += 1
+  }
+
+  if (parent && typeof parent === 'object') parent[keys[index - 1]] = value
+}

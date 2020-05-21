@@ -19,7 +19,7 @@ module.exports = (env = {}) => ({
   devtool: env.production ? 'cheap-source-map' : 'inline-source-map',
 
   resolve: {
-    extensions: [".ts", ".js", ".json"]
+    extensions: ['.ts', '.js', '.json']
   },
 
   module: {
@@ -31,19 +31,17 @@ module.exports = (env = {}) => ({
       {
         test: /\.s(a|c)ss$/,
         use: [
-            'style-loader',
-            'css-loader',
-            {
-                loader: 'postcss-loader',
-                options: {
-                    plugins: [
-                        autoprefixer()
-                    ]
-                }
-            },
-            'sass-loader'
+          'style-loader',
+          'css-loader',
+          {
+            loader: 'postcss-loader',
+            options: {
+              plugins: [autoprefixer()]
+            }
+          },
+          'sass-loader'
         ]
-    }
+      }
     ]
   },
 
@@ -52,10 +50,10 @@ module.exports = (env = {}) => ({
       template: 'index.html',
       inject: 'head'
     }),
-    ...(env.production? [new CleanWebpackPlugin()] : [])
+    ...(env.production ? [new CleanWebpackPlugin()] : [])
   ],
   devServer: {
     host: '0.0.0.0',
-    port: 8000
+    port: 3000
   }
 })

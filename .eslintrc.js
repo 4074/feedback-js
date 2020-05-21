@@ -13,6 +13,15 @@ module.exports = {
       quoteProps: 'as-needed',
       jsxSingleQuote: false,
       arrowParens: 'always'
-  }],
+    }],
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "js": "never",
+        "jsx": "never",
+        "ts": "never",
+        "tsx": "never"
+      }]
   }
 }
