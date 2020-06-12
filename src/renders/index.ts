@@ -32,9 +32,10 @@ export default class Component {
     this.modal.onVisibleChange((visible) => {
       this.trigger.changeMode(visible ? 'active' : 'normal')
     })
+    this.handleTrigger()
   }
 
-  handleTrigger = (event: MouseEvent): void => {
-    this.modal.toogle({ x: event.pageX, y: event.pageY })
+  handleTrigger = (): void => {
+    this.modal.toogle()
   }
 }

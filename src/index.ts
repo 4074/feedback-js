@@ -15,7 +15,7 @@ const defaults: FeedbackOptions = {
       input: '请输入',
       image: '上传或粘贴图片'
     },
-    contact: '还可以直接我们：XXX'
+    contact: '还可以直接联系我们：XXX'
   }
 }
 

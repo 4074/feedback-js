@@ -1,10 +1,16 @@
 import { requestAnimationFrame } from '../utils'
-import { iconImage } from './icons'
+import { iconImage, iconRemove } from './icons'
 
 export default class Modal {
   private $element: HTMLDivElement
 
   private $wrap: HTMLDivElement
+
+  private $file: HTMLInputElement
+
+  private $uploader: HTMLDivElement
+
+  private $trigger: HTMLDivElement
 
   private hiding = false
 
@@ -13,6 +19,10 @@ export default class Modal {
   private visible = false
 
   private visibleHanders: ((visible: boolean) => void)[] = []
+
+  private images: File[] = []
+
+  private imageMaxCount = 3
 
   maskClosable = true
 
@@ -33,8 +43,9 @@ export default class Modal {
             </div>
             <div class="feedback-form-item">
               <div class="feedback-form-label">${strings.labels?.image}</div>
+              <input type="file" class="feedback-input-file" multiple />
               <div class="feedback-form-uploader">
-                <div class="feedback-form-image">
+                <div class="feedback-form-image feedback-uploader-trigger">
                   ${iconImage}
                   <div class="feedback-image-placeholder">${
                     strings.placeholders?.image
@@ -57,15 +68,80 @@ export default class Modal {
       '.feedback-modal'
     ) as HTMLDivElement
 
-    const $close = this.$element.querySelector('.feedback-modal-close')
-    if ($close) {
-      $close.addEventListener('click', this.hide)
-    }
+    this.$file = this.$element.querySelector(
+      '.feedback-input-file'
+    ) as HTMLInputElement
+    this.$file.addEventListener('change', this.handleUpload)
+
+    this.$uploader = this.$element.querySelector(
+      '.feedback-form-uploader'
+    ) as HTMLInputElement
+
+    this.$trigger = this.$element.querySelector(
+      '.feedback-uploader-trigger'
+    ) as HTMLInputElement
+    this.$trigger.addEventListener('click', this.handleUploadStart)
 
     parent.appendChild(this.$element)
   }
 
-  toogle = (origin: { x: number; y: number } | null): void => {
+  handleUpload = (): void => {
+    const { files } = this.$file
+    console.log(files)
+    if (files) {
+      for (let i = 0; i < files.length; i += 1) {
+        this.images.push(files[i])
+
+        const $item = this.createImageItem(this.images.length - 1, files[i])
+        this.$uploader.insertBefore($item, this.$trigger)
+
+        if (this.images.length === this.imageMaxCount) {
+          this.$uploader.removeChild(this.$trigger)
+          return
+        }
+      }
+    }
+  }
+
+  handleUploadStart = (): void => {
+    this.$file.click()
+  }
+
+  handleRemoveImage = ($item: HTMLDivElement): void => {
+    const index = parseInt($item.getAttribute('data-index') || '', 10)
+    if (isNaN(index)) return
+
+    this.$uploader.removeChild($item)
+    this.images.splice(index, 1)
+    if (this.images.length === this.imageMaxCount - 1) {
+      this.$uploader.appendChild(this.$trigger)
+    }
+  }
+
+  createImageItem = (index: number, file: File): HTMLDivElement => {
+    const $item = document.createElement('div')
+    $item.classList.add('feedback-form-image')
+    $item.setAttribute('data-index', index.toString())
+    $item.addEventListener('click', this.handleRemoveImage.bind(null, $item))
+
+    const $mask = document.createElement('div')
+    $mask.classList.add('feedback-image-mask')
+    $mask.innerHTML = iconRemove
+    $item.appendChild($mask)
+
+    const $img = document.createElement('img') as HTMLImageElement
+    const reader = new FileReader()
+    reader.readAsDataURL(file)
+    reader.onload = (): void => {
+      $img.src = reader.result as string
+      reader.onload = null
+    }
+    $item.appendChild($img)
+
+    return $item
+  }
+
+  toogle = (): void => {
     if (!this.$element || this.showing || this.hiding) return
     if (this.visible) return this.hide()
 
@@ -73,9 +149,6 @@ export default class Modal {
     this.showing = true
     this.handleVisibleChange()
 
-    if (origin) {
-      this.$wrap.style.transformOrigin = `${origin.x}px ${origin.y}px`
-    }
     this.$element.style.display = 'block'
     this.$wrap.classList.add('enter-start')
 
