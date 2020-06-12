@@ -11,12 +11,13 @@ declare namespace Model {
 
 declare interface FeedbackOptions {
   container?: Element
-  messages?: FeedbackOptionsMessage
+  strings?: FeedbackStrings
   onClick?: (event: MouseEvent) => {}
 }
 
-interface FeedbackOptionsMessage {
+interface FeedbackStrings {
   title?: string
+  submit?: string
   labels?: {
     input?: string
     image?: string
@@ -25,5 +26,5 @@ interface FeedbackOptionsMessage {
     input?: string
     image?: string
   }
-  footer?: string
+  contact?: string
 }

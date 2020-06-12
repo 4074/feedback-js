@@ -4,8 +4,9 @@ import Component from './renders'
 import { deepExtends } from './utils'
 
 const defaults: FeedbackOptions = {
-  messages: {
+  strings: {
     title: '意见反馈',
+    submit: '提 交',
     labels: {
       input: '您遇到的问题、意见或建议',
       image: '可附上相关截图（最多添加3张）'
@@ -14,7 +15,7 @@ const defaults: FeedbackOptions = {
       input: '请输入',
       image: '上传或粘贴图片'
     },
-    footer: '还可以直接我们：XXX'
+    contact: '还可以直接我们：XXX'
   }
 }
 
@@ -37,7 +38,7 @@ export default class Feedback {
   init(id: string, options: FeedbackOptions = {}): void {
     this.options = deepExtends(defaults, options)
     this.app = { id }
-    this.componet = new Component(options)
+    this.componet = new Component(this.options)
     this.componet.render(this.options.container || document.body)
   }
 

@@ -22,7 +22,8 @@ export default class Component {
     parent.appendChild(this.$conainer)
 
     this.modal = new Modal()
-    this.modal.render(this.$conainer)
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    this.modal.render(this.$conainer, this.options.strings!)
 
     this.trigger = new Trigger()
     this.trigger.render(this.$conainer)
