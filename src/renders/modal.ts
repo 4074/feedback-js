@@ -87,18 +87,18 @@ export default class Modal {
 
   handleUpload = (): void => {
     const { files } = this.$file
-    console.log(files)
     if (files) {
+      this.$uploader.removeChild(this.$trigger)
       for (let i = 0; i < files.length; i += 1) {
         this.images.push(files[i])
 
         const $item = this.createImageItem(this.images.length - 1, files[i])
-        this.$uploader.insertBefore($item, this.$trigger)
+        this.$uploader.appendChild($item)
 
-        if (this.images.length === this.imageMaxCount) {
-          this.$uploader.removeChild(this.$trigger)
-          return
-        }
+        if (this.images.length === this.imageMaxCount) return
+      }
+      if (this.images.length < this.imageMaxCount) {
+        this.$uploader.appendChild(this.$trigger)
       }
     }
   }

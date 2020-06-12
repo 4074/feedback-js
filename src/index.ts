@@ -22,7 +22,7 @@ const defaults: FeedbackOptions = {
 export default class Feedback {
   private request: Model.Request
 
-  private app?: Model.App
+  // private app?: Model.App
 
   private componet?: Component
 
@@ -37,7 +37,8 @@ export default class Feedback {
 
   init(id: string, options: FeedbackOptions = {}): void {
     this.options = deepExtends(defaults, options)
-    this.app = { id }
+    console.log(id)
+    // this.app = { id }
     this.componet = new Component(this.options)
     this.componet.render(this.options.container || document.body)
   }
