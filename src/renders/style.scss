@@ -97,23 +97,25 @@
   padding: 10px 5px;
   pointer-events: initial;
   box-shadow: 0 8px 36px 0 rgba(0,18,46,0.16);
+  transition: .2s;
+  transform: translateY(0);
 
   &.enter-start {
     opacity: 0;
-    transform: scale(0);
+    transform: translateY(20px);
   }
   &.enter-end {
     opacity: 1;
-    transform: scale(1);
+    transform: translateY(0);
   }
 
   &.leave-start {
     opacity: 1;
-    transform: scale(1);
+    transform: translateY(0);
   }
   &.leave-end {
     opacity: 0;
-    transform: scale(0);
+    transform: translateY(20px);
   }
 
   .feedback-modal-close {
