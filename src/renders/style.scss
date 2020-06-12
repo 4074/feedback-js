@@ -39,8 +39,41 @@
       0 9px 28px 8px rgba(0, 0, 0, 0.10);
   }
 
+  &.active {
+    .trigger-icon-normal {
+      transform: scale(0);
+    }
+    .trigger-icon-active {
+      transform: rotate(0);
+      svg {
+        display: block;
+      }
+    }
+  }
+
+  .trigger-icon-normal, .trigger-icon-active {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    position: absolute;
+    transition: ease-in-out transform 0.2s;
+  }
+
+  .trigger-icon-normal {
+    transform: scale(1);
+    svg {
+      display: block;
+    }
+  }
+
+  .trigger-icon-active {
+    transform: rotate(45deg);
+  }
+
   svg {
-    display: block;
+    display: none;
     width: 28px;
     height: 28px;
   }

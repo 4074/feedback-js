@@ -9,6 +9,10 @@ export default class Modal {
 
   private showing = false
 
+  private visible = false
+
+  private visibleHanders: ((visible: boolean) => void)[] = []
+
   maskClosable = true
 
   render(parent: Element): void {
@@ -39,9 +43,13 @@ export default class Modal {
     parent.appendChild(this.$element)
   }
 
-  show = (origin: { x: number; y: number } | null): void => {
+  toogle = (origin: { x: number; y: number } | null): void => {
     if (!this.$element || this.showing || this.hiding) return
+    if (this.visible) return this.hide()
+
+    this.visible = true
     this.showing = true
+    this.handleVisibleChange()
 
     if (origin) {
       this.$wrap.style.transformOrigin = `${origin.x}px ${origin.y}px`
@@ -61,9 +69,12 @@ export default class Modal {
   }
 
   hide = (): void => {
-    if (!this.$element || this.hiding || this.showing) return
+    if (!this.$element || this.hiding || this.showing || !this.visible) return
+
+    this.visible = false
     this.hiding = true
     this.$wrap.classList.add('leave-start')
+    this.handleVisibleChange()
 
     requestAnimationFrame(() => {
       this.$wrap.classList.add('leave-end')
@@ -75,6 +86,16 @@ export default class Modal {
       this.$element.style.display = 'none'
       this.hiding = false
     }, 300)
+  }
+
+  private handleVisibleChange = (): void => {
+    for (const handler of this.visibleHanders) {
+      handler(this.visible)
+    }
+  }
+
+  onVisibleChange = (handler: (visible: boolean) => void): void => {
+    this.visibleHanders.push(handler)
   }
 
   remove = (): void => {

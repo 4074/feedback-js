@@ -27,9 +27,13 @@ export default class Component {
     this.trigger = new Trigger()
     this.trigger.render(this.$conainer)
     this.trigger.onClick(this.options.onClick || this.handleTrigger)
+
+    this.modal.onVisibleChange((visible) => {
+      this.trigger.changeMode(visible ? 'active' : 'normal')
+    })
   }
 
   handleTrigger = (event: MouseEvent): void => {
-    this.modal.show({ x: event.pageX, y: event.pageY })
+    this.modal.toogle({ x: event.pageX, y: event.pageY })
   }
 }

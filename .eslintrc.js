@@ -12,7 +12,8 @@ module.exports = {
       singleQuote: true,
       quoteProps: 'as-needed',
       jsxSingleQuote: false,
-      arrowParens: 'always'
+      arrowParens: 'always',
+      endOfLine: 'auto'
     }],
     "import/extensions": [
       "error",
