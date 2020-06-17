@@ -1,4 +1,8 @@
 import { iconFeedback, iconClose } from './icons'
+import emitter from '../emitter'
+import { MODAL_VISIBLE_CHANGE_EVENT } from './modal'
+
+export const TRIGGER_CLICK = 'TRIGGER_CLICK'
 
 export default class Trigger {
   private $element: HTMLDivElement
@@ -12,6 +16,11 @@ export default class Trigger {
       <div class="trigger-icon-active">${iconClose}</div>
     `
     parent.appendChild(this.$element)
+    this.$element.addEventListener('click', () => {
+      emitter.emit(TRIGGER_CLICK)
+    })
+
+    emitter.on(MODAL_VISIBLE_CHANGE_EVENT, this.changeMode)
   }
 
   show = (): void => {
@@ -24,17 +33,12 @@ export default class Trigger {
     this.$element.parentElement.removeChild(this.$element)
   }
 
-  changeMode = (status: 'normal' | 'active'): void => {
+  changeMode = (visible: boolean): void => {
     if (!this.$element) return
-    if (status === 'normal') {
-      this.$element.classList.remove('active')
-    } else {
+    if (visible) {
       this.$element.classList.add('active')
+    } else {
+      this.$element.classList.remove('active')
     }
-  }
-
-  onClick(fn: (event: MouseEvent) => any): void {
-    if (!this.$element) return
-    this.$element.addEventListener('click', fn)
   }
 }

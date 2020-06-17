@@ -1,5 +1,9 @@
 import { requestAnimationFrame } from '../utils'
 import { iconImage, iconRemove } from './icons'
+import emitter from '../emitter'
+import { TRIGGER_CLICK } from './trigger'
+
+export const MODAL_VISIBLE_CHANGE_EVENT = 'MODAL_VISIBLE_CHANGE_EVENT'
 
 export default class Modal {
   private $element: HTMLDivElement
@@ -17,8 +21,6 @@ export default class Modal {
   private showing = false
 
   private visible = false
-
-  private visibleHanders: ((visible: boolean) => void)[] = []
 
   private images: File[] = []
 
@@ -83,6 +85,8 @@ export default class Modal {
     this.$trigger.addEventListener('click', this.handleUploadStart)
 
     parent.appendChild(this.$element)
+
+    emitter.on(TRIGGER_CLICK, this.toogle)
   }
 
   handleUpload = (): void => {
@@ -147,7 +151,7 @@ export default class Modal {
 
     this.visible = true
     this.showing = true
-    this.handleVisibleChange()
+    emitter.emit(MODAL_VISIBLE_CHANGE_EVENT, this.visible)
 
     this.$element.style.display = 'block'
     this.$wrap.classList.add('enter-start')
@@ -169,7 +173,7 @@ export default class Modal {
     this.visible = false
     this.hiding = true
     this.$wrap.classList.add('leave-start')
-    this.handleVisibleChange()
+    emitter.emit(MODAL_VISIBLE_CHANGE_EVENT, this.visible)
 
     requestAnimationFrame(() => {
       this.$wrap.classList.add('leave-end')
@@ -181,16 +185,6 @@ export default class Modal {
       this.$element.style.display = 'none'
       this.hiding = false
     }, 300)
-  }
-
-  private handleVisibleChange = (): void => {
-    for (const handler of this.visibleHanders) {
-      handler(this.visible)
-    }
-  }
-
-  onVisibleChange = (handler: (visible: boolean) => void): void => {
-    this.visibleHanders.push(handler)
   }
 
   remove = (): void => {

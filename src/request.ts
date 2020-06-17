@@ -1,5 +1,7 @@
-export default class Request implements Model.Request {
-  send = (data: any): void => {
-    console.log(data)
-  }
+async function upload(files: File[], params: object = {}): Promise<any> {
+  console.log(files, params)
+}
+
+export default {
+  upload
 }

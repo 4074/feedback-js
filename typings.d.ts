@@ -5,7 +5,7 @@ declare namespace Model {
 
   interface Request {
     id?: number
-    send: (data: any) => void
+    upload: (data: any) => void
   }
 }
 

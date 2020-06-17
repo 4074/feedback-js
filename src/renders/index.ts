@@ -2,6 +2,7 @@ import Modal from './modal'
 import Trigger from './trigger'
 
 import './style.scss'
+import emitter from '../emitter'
 
 export default class Component {
   private $conainer: HTMLDivElement
@@ -27,15 +28,5 @@ export default class Component {
 
     this.trigger = new Trigger()
     this.trigger.render(this.$conainer)
-    this.trigger.onClick(this.options.onClick || this.handleTrigger)
-
-    this.modal.onVisibleChange((visible) => {
-      this.trigger.changeMode(visible ? 'active' : 'normal')
-    })
-    this.handleTrigger()
-  }
-
-  handleTrigger = (): void => {
-    this.modal.toogle()
   }
 }

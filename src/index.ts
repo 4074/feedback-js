@@ -1,5 +1,5 @@
 /* eslint-disable class-methods-use-this */
-import Request from './request'
+import request from './request'
 import Component from './renders'
 import { deepExtends } from './utils'
 
@@ -20,9 +20,7 @@ const defaults: FeedbackOptions = {
 }
 
 export default class Feedback {
-  private request: Model.Request
-
-  // private app?: Model.App
+  private app?: Model.App
 
   private componet?: Component
 
@@ -32,20 +30,26 @@ export default class Feedback {
 
   constructor(window: Window) {
     this.window = window
-    this.request = new Request()
   }
 
   init(id: string, options: FeedbackOptions = {}): void {
     this.options = deepExtends(defaults, options)
-    console.log(id)
-    // this.app = { id }
+    this.app = { id }
     this.componet = new Component(this.options)
     this.componet.render(this.options.container || document.body)
   }
 
   send = (data: any): void => {
     // send log
-    this.request.send(data)
+    request.upload(data, this.getInfo())
+  }
+
+  getInfo(): object {
+    return {
+      app: this.app,
+      path: this.window.location.href,
+      userAgent: this.window.navigator.userAgent
+    }
   }
 }
 
