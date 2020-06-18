@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-expressions */
 export class EventEmitter {
-  handleMap: Map<string, Map<symbol, Function>>
+  private handleMap: Map<string, Map<symbol, Function>>
 
   constructor() {
     this.handleMap = new Map()

@@ -4,17 +4,22 @@ import emitter from '../emitter'
 import { TRIGGER_CLICK } from './trigger'
 
 export const MODAL_VISIBLE_CHANGE_EVENT = 'MODAL_VISIBLE_CHANGE_EVENT'
+export const MODAL_SUBMIT_EVENT = 'MODAL_SUBMIT_EVENT'
 
 export default class Modal {
   private $element: HTMLDivElement
 
   private $wrap: HTMLDivElement
 
+  private $input: HTMLTextAreaElement
+
   private $file: HTMLInputElement
 
   private $uploader: HTMLDivElement
 
   private $trigger: HTMLDivElement
+
+  private $submit: HTMLButtonElement
 
   private hiding = false
 
@@ -70,6 +75,8 @@ export default class Modal {
       '.feedback-modal'
     ) as HTMLDivElement
 
+    this.$input = this.$element.querySelector('textarea') as HTMLTextAreaElement
+
     this.$file = this.$element.querySelector(
       '.feedback-input-file'
     ) as HTMLInputElement
@@ -84,8 +91,12 @@ export default class Modal {
     ) as HTMLInputElement
     this.$trigger.addEventListener('click', this.handleUploadStart)
 
-    parent.appendChild(this.$element)
+    this.$submit = this.$element.querySelector(
+      '.feedback-submit'
+    ) as HTMLButtonElement
+    this.$submit.addEventListener('click', this.handleSubmit)
 
+    parent.appendChild(this.$element)
     emitter.on(TRIGGER_CLICK, this.toogle)
   }
 
@@ -120,6 +131,13 @@ export default class Modal {
     if (this.images.length === this.imageMaxCount - 1) {
       this.$uploader.appendChild(this.$trigger)
     }
+  }
+
+  handleSubmit = (): void => {
+    emitter.emit(MODAL_SUBMIT_EVENT, {
+      files: this.images,
+      message: this.$input.value
+    })
   }
 
   createImageItem = (index: number, file: File): HTMLDivElement => {

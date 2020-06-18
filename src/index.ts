@@ -2,6 +2,9 @@
 import request from './request'
 import Component from './renders'
 import { deepExtends } from './utils'
+import emitter from './emitter'
+import { MODAL_SUBMIT_EVENT } from './renders/modal'
+import { TRIGGER_CLICK } from './renders/trigger'
 
 const defaults: FeedbackOptions = {
   strings: {
@@ -20,11 +23,13 @@ const defaults: FeedbackOptions = {
 }
 
 export default class Feedback {
-  private app?: Model.App
+  private id: string
 
-  private componet?: Component
+  private userInfo: any
 
-  private options: FeedbackOptions = {}
+  private component?: Component
+
+  private options: FeedbackOptions
 
   readonly window: Window
 
@@ -34,21 +39,42 @@ export default class Feedback {
 
   init(id: string, options: FeedbackOptions = {}): void {
     this.options = deepExtends(defaults, options)
-    this.app = { id }
-    this.componet = new Component(this.options)
-    this.componet.render(this.options.container || document.body)
+    this.id = id
+    this.component = new Component(this.options)
+    this.component.render(this.options.container || document.body)
+
+    emitter.on(MODAL_SUBMIT_EVENT, this.submit)
+    emitter.emit(TRIGGER_CLICK)
   }
 
-  send = (data: any): void => {
-    // send log
-    request.upload(data, this.getInfo())
+  user(info: any): any {
+    if (info === undefined) return this.userInfo
+    this.userInfo = info
   }
 
-  getInfo(): object {
+  private submit = ({
+    files,
+    message
+  }: {
+    files: File[]
+    message: string
+  }): void => {
+    const params = this.generateRequestData(message)
+    if (this.options.url) {
+      request.upload(this.options.url, files, params)
+    } else {
+      // eslint-disable-next-line no-console
+      console.log(files, params)
+    }
+  }
+
+  private generateRequestData(message: string): FeedbackRequestData {
     return {
-      app: this.app,
+      id: this.id,
       path: this.window.location.href,
-      userAgent: this.window.navigator.userAgent
+      userAgent: this.window.navigator.userAgent,
+      message,
+      user: this.userInfo
     }
   }
 }

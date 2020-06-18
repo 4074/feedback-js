@@ -1,3 +1,7 @@
+declare type StringKeyObj<T> = {
+  [key in string]: T
+}
+
 declare namespace Model {
   interface App {
     id: string
@@ -10,9 +14,9 @@ declare namespace Model {
 }
 
 declare interface FeedbackOptions {
+  url?: string
   container?: Element
   strings?: FeedbackStrings
-  onClick?: (event: MouseEvent) => {}
 }
 
 interface FeedbackStrings {
@@ -27,4 +31,12 @@ interface FeedbackStrings {
     image?: string
   }
   contact?: string
+}
+
+interface FeedbackRequestData {
+  id: string
+  path: string
+  userAgent: string
+  user?: any
+  message: string
 }

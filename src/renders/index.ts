@@ -2,7 +2,6 @@ import Modal from './modal'
 import Trigger from './trigger'
 
 import './style.scss'
-import emitter from '../emitter'
 
 export default class Component {
   private $conainer: HTMLDivElement
