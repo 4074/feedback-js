@@ -6,7 +6,11 @@ import emitter from './emitter'
 import { MODAL_SUBMIT_EVENT } from './renders/modal'
 import { TRIGGER_CLICK } from './renders/trigger'
 
+const SUBMIT_SUCCESS = 'SUBMIT_SUCCESS'
+const SUBMIT_FAIL = 'SUBMIT_FAIL'
+
 const defaults: FeedbackOptions = {
+  url: '',
   strings: {
     title: '意见反馈',
     submit: '提 交',
@@ -23,9 +27,11 @@ const defaults: FeedbackOptions = {
 }
 
 export default class Feedback {
-  private id: string
+  private appId: string
 
-  private userInfo: any
+  private __user: string
+
+  private __data: any
 
   private component?: Component
 
@@ -37,9 +43,9 @@ export default class Feedback {
     this.window = window
   }
 
-  init(id: string, options: FeedbackOptions = {}): void {
+  init(appId: string, options: FeedbackOptions = {}): void {
     this.options = deepExtends(defaults, options)
-    this.id = id
+    this.appId = appId
     this.component = new Component(this.options)
     this.component.render(this.options.container || document.body)
 
@@ -47,9 +53,14 @@ export default class Feedback {
     emitter.emit(TRIGGER_CLICK)
   }
 
-  user(info: any): any {
-    if (info === undefined) return this.userInfo
-    this.userInfo = info
+  user(data: string): any {
+    if (data === undefined) return this.__user
+    this.__user = data
+  }
+
+  data(data: any): any {
+    if (data === undefined) return this.__data
+    this.__data = data
   }
 
   private submit = ({
@@ -61,20 +72,29 @@ export default class Feedback {
   }): void => {
     const params = this.generateRequestData(message)
     if (this.options.url) {
-      request.upload(this.options.url, files, params)
+      request.upload(this.options.url, files, params).then(
+        (data) => {
+          emitter.emit(SUBMIT_SUCCESS, data)
+        },
+        (err) => {
+          emitter.emit(SUBMIT_FAIL, err)
+        }
+      )
     } else {
       // eslint-disable-next-line no-console
       console.log(files, params)
     }
   }
 
-  private generateRequestData(message: string): FeedbackRequestData {
+  private generateRequestData(message = ''): FeedbackRequestData {
     return {
-      id: this.id,
+      appId: this.appId,
       path: this.window.location.href,
       userAgent: this.window.navigator.userAgent,
       message,
-      user: this.userInfo
+      user: this.__user,
+      data: this.__data,
+      timestamp: new Date().getTime()
     }
   }
 }

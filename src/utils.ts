@@ -21,12 +21,25 @@ export function requestAnimationFrame(fn: () => void): void {
 }
 
 export function deepExtends<T extends object>(defaults: T, custom: T): T {
-  // const result = {}
-  // function dfs(data: any) {
-  //   for (const key of Object.keys(data)) {
-  //   }
-  // }
-  return defaults || custom
+  const result: any = {}
+  for (const key of Object.keys(defaults)) {
+    if (typeof (defaults as any)[key] === 'object') {
+      if (custom && (custom as any)[key]) {
+        result[key] = deepExtends(
+          (defaults as any)[key],
+          custom && (custom as any)[key]
+        )
+      } else {
+        result[key] = (defaults as any)[key]
+      }
+    } else {
+      result[key] =
+        custom && (custom as any)[key]
+          ? (custom as any)[key]
+          : (defaults as any)[key]
+    }
+  }
+  return result as T
 }
 
 export function setDeepValue(source: object, keys: string[], value: any): void {

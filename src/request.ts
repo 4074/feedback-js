@@ -1,4 +1,4 @@
-async function upload<T>(
+function upload<T>(
   url: string,
   files: File[],
   params: StringKeyObj<any> = {}
@@ -8,11 +8,11 @@ async function upload<T>(
     formData.append('files', file)
   }
   for (const key of Object.keys(params)) {
+    if (params[key] === undefined) continue
     formData.append(key, params[key])
   }
   const option: RequestInit = {
     method: 'POST',
-    credentials: 'same-origin',
     mode: 'cors',
     body: formData
   }
