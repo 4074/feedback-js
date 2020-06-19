@@ -6,8 +6,9 @@ import emitter from './emitter'
 import { MODAL_SUBMIT_EVENT } from './renders/modal'
 import { TRIGGER_CLICK } from './renders/trigger'
 
-const SUBMIT_SUCCESS = 'SUBMIT_SUCCESS'
-const SUBMIT_FAIL = 'SUBMIT_FAIL'
+export const SUBMITING_EVENT = 'SUBMITING_EVENT'
+export const SUBMIT_SUCCESS_EVENT = 'SUBMIT_SUCCESS_EVENT'
+export const SUBMIT_FAIL_EVENT = 'SUBMIT_FAIL_EVENT'
 
 const defaults: FeedbackOptions = {
   url: '',
@@ -72,12 +73,13 @@ export default class Feedback {
   }): void => {
     const params = this.generateRequestData(message)
     if (this.options.url) {
+      emitter.emit(SUBMITING_EVENT)
       request.upload(this.options.url, files, params).then(
         (data) => {
-          emitter.emit(SUBMIT_SUCCESS, data)
+          emitter.emit(SUBMIT_SUCCESS_EVENT, data)
         },
         (err) => {
-          emitter.emit(SUBMIT_FAIL, err)
+          emitter.emit(SUBMIT_FAIL_EVENT, err)
         }
       )
     } else {

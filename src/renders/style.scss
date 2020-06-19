@@ -263,7 +263,9 @@
 
   .feedback-modal-footer {
     padding: 10px;
-    button {
+    
+    .feedback-submit-button {
+      position: relative;
       width: 80px;
       height: 32px;
       display: block;
@@ -274,9 +276,63 @@
       background: #1890ff;
       border-radius: 4px;
       cursor: pointer;
-      &:hover {
+      transition: 0.2s;
+
+      &:hover:enabled {
         background: #40a9ff;
       }
+
+      &:disabled {
+        cursor: default;
+      }
+
+      &::before {
+        position: absolute;
+        top: -1px;
+        right: -1px;
+        bottom: -1px;
+        left: -1px;
+        z-index: 1;
+        display: none;
+        background: #fff;
+        border-radius: inherit;
+        opacity: .35;
+        transition: opacity .2s;
+        content: '';
+        pointer-events: none;
+      }
+
+      &.feedback-sumbit-loading {
+        pointer-events: none;
+        width: 102px;
+
+        &::before {
+          display: block;
+        }
+
+        .feedback-submit-spinner {
+          width: 18px;
+          padding-right: 4px;
+        }
+      }
+
+      .feedback-submit-spinner {
+        display: inline-block;
+        padding-right: 0;
+        width: 0;
+        overflow: hidden;
+        transform: translateY(4px);
+        transition: .2s;
+        svg {
+          animation: loadingCircle 1s infinite linear;
+        }
+      }
     }
+  }
+}
+
+@keyframes loadingCircle {
+  100% {
+    transform: rotate(360deg)
   }
 }

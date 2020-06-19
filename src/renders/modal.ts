@@ -1,7 +1,12 @@
 import { requestAnimationFrame } from '../utils'
-import { iconImage, iconRemove } from './icons'
+import { iconImage, iconRemove, iconSpinner } from './icons'
 import emitter from '../emitter'
 import { TRIGGER_CLICK } from './trigger'
+import {
+  SUBMITING_EVENT,
+  SUBMIT_SUCCESS_EVENT,
+  SUBMIT_FAIL_EVENT
+} from '../index'
 
 export const MODAL_VISIBLE_CHANGE_EVENT = 'MODAL_VISIBLE_CHANGE_EVENT'
 export const MODAL_SUBMIT_EVENT = 'MODAL_SUBMIT_EVENT'
@@ -66,7 +71,10 @@ export default class Modal {
             }
           </div>
           <div class="feedback-modal-footer">
-            <button class="feedback-submit">${strings.submit}</button>
+            <button class="feedback-submit-button">
+              <span class="feedback-submit-spinner">${iconSpinner}</span>
+              <span class="feedback-submit-text">${strings.submit}</span>  
+            </button>
           </div>
       </div>
     `
@@ -92,12 +100,21 @@ export default class Modal {
     this.$trigger.addEventListener('click', this.handleUploadStart)
 
     this.$submit = this.$element.querySelector(
-      '.feedback-submit'
+      '.feedback-submit-button'
     ) as HTMLButtonElement
     this.$submit.addEventListener('click', this.handleSubmit)
 
     parent.appendChild(this.$element)
     emitter.on(TRIGGER_CLICK, this.toogle)
+    emitter.on(SUBMITING_EVENT, () => {
+      this.$submit.classList.add('feedback-sumbit-loading')
+    })
+    emitter.on(SUBMIT_SUCCESS_EVENT, () => {
+      this.$submit.classList.remove('feedback-sumbit-loading')
+    })
+    emitter.on(SUBMIT_FAIL_EVENT, () => {
+      // this.$submit.classList.remove('feedback-sumbit-loading')
+    })
   }
 
   handleUpload = (): void => {
