@@ -12,8 +12,8 @@ export default class Trigger {
     this.$element = document.createElement('div')
     this.$element.classList.add('feedback-trigger')
     this.$element.innerHTML = `
-      <div class="trigger-icon-normal">${iconFeedback}</div>
-      <div class="trigger-icon-active">${iconClose}</div>
+      <div class="trigger-icon trigger-icon-normal">${iconFeedback}</div>
+      <div class="trigger-icon trigger-icon-active">${iconClose}</div>
     `
     parent.appendChild(this.$element)
     this.$element.addEventListener('click', () => {

@@ -25,17 +25,20 @@
   z-index: 99;
   background: #fff;
   cursor: pointer;
-  color: #a8a8a8;
+  color: #1890ff;
   transition: color 0.3s, box-shadow 0.3s;
   box-shadow: 0 3px 6px -4px rgba(0, 0, 0, 0.12),
     0 6px 16px 0 rgba(0, 0, 0, 0.08),
     0 9px 28px 8px rgba(0, 0, 0, 0.05);
 
   &:hover {
-    color: #1890ff;
     box-shadow: 0 3px 6px -4px rgba(0, 0, 0, 0.17),
       0 6px 16px 0 rgba(0, 0, 0, 0.13),
       0 9px 28px 8px rgba(0, 0, 0, 0.10);
+
+    .trigger-icon {
+      opacity: 0.9;
+    }
   }
 
   &.active {
@@ -43,6 +46,7 @@
       transform: scale(0);
     }
     .trigger-icon-active {
+      color: #ff4d4f;
       transform: rotate(0);
       svg {
         display: block;
@@ -50,6 +54,9 @@
     }
   }
 
+  .trigger-icon {
+    opacity: 1;
+  }
   .trigger-icon-normal, .trigger-icon-active {
     top: 0;
     left: 0;
@@ -57,7 +64,7 @@
     height: 100%;
     padding: 10px;
     position: absolute;
-    transition: ease-in-out transform 0.2s;
+    transition: 0.2s;
   }
 
   .trigger-icon-normal {
