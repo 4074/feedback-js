@@ -107,6 +107,20 @@ export default class Modal {
       '.feedback-form-uploader'
     ) as HTMLInputElement
 
+    this.$uploader.addEventListener('dragover', (event: DragEvent) => {
+      event.preventDefault()
+    })
+    this.$uploader.addEventListener('drop', (event: DragEvent) => {
+      event.preventDefault()
+      event.stopPropagation()
+      if (event.dataTransfer) {
+        const files = getMediaFromTransfer(event.dataTransfer)
+        if (files.length) {
+          this.renderImages(files)
+        }
+      }
+    })
+
     this.$trigger = this.$element.querySelector(
       '.feedback-uploader-trigger'
     ) as HTMLInputElement
