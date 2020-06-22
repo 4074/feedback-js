@@ -55,3 +55,29 @@ export function setDeepValue(source: object, keys: string[], value: any): void {
 
   if (parent && typeof parent === 'object') parent[keys[index - 1]] = value
 }
+
+export function getMediaFromTransfer(transfer: DataTransfer): File[] {
+  const data: File[] = []
+  if (transfer) {
+    const { items, files } = transfer
+    if (items) {
+      for (let i = 0; i < items.length; i += 1) {
+        const item = items[i]
+        if (item.kind === 'file') {
+          const file = item.getAsFile() as File
+          if (/(^image\/|^video\/mp4)/.test(file.type)) {
+            data.push(file)
+          }
+        }
+      }
+    } else {
+      for (let i = 0; i < files.length; i += 1) {
+        const file = files[i]
+        if (/(^image\/|^video\/mp4)/.test(file.type)) {
+          data.push(file)
+        }
+      }
+    }
+  }
+  return data
+}

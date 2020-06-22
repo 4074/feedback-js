@@ -1,4 +1,4 @@
-import { requestAnimationFrame } from '../utils'
+import { requestAnimationFrame, getMediaFromTransfer } from '../utils'
 import { iconImage, iconRemove, iconSpinner } from './icons'
 import Alert from './alert'
 
@@ -61,7 +61,7 @@ export default class Modal {
               <div class="feedback-form-label">${strings.labels?.image}</div>
               <input type="file" class="feedback-input-file" multiple accept="image/jpg,image/jpeg,image/png,image/gif,video/mp4" />
               <div class="feedback-form-uploader">
-                <div class="feedback-form-image feedback-uploader-trigger">
+                <div class="feedback-uploader-trigger">
                   ${iconImage}
                   <div class="feedback-image-placeholder">${
                     strings.placeholders?.image
@@ -85,6 +85,16 @@ export default class Modal {
     this.$wrap = this.$element.querySelector(
       '.feedback-modal'
     ) as HTMLDivElement
+
+    this.$wrap.addEventListener('paste', (event: ClipboardEvent) => {
+      event.stopPropagation()
+      if (event.clipboardData) {
+        const files = getMediaFromTransfer(event.clipboardData)
+        if (files.length) {
+          this.renderImages(files)
+        }
+      }
+    })
 
     this.$input = this.$element.querySelector('textarea') as HTMLTextAreaElement
 
@@ -135,18 +145,44 @@ export default class Modal {
   handleUpload = (): void => {
     const { files } = this.$file
     if (files) {
+      this.renderImages(files)
+    }
+  }
+
+  shiftImage(): void {
+    this.images.shift()
+    const items = this.$wrap.querySelectorAll(
+      '.feedback-form-image'
+    ) as NodeListOf<Element>
+    for (let i = 0; i < items.length; i += 1) {
+      const item = items[i]
+      if (i === 0) {
+        ;(item.parentElement as HTMLDivElement).removeChild(item)
+      } else {
+        item.setAttribute('data-index', (i - 1).toString())
+      }
+    }
+  }
+
+  renderImages = (files: File[] | FileList): void => {
+    if (this.images.length < this.imageMaxCount) {
       this.$uploader.removeChild(this.$trigger)
-      for (let i = 0; i < files.length; i += 1) {
-        this.images.push(files[i])
+    }
 
-        const $item = this.createImageItem(this.images.length - 1, files[i])
-        this.$uploader.appendChild($item)
+    for (let i = 0; i < files.length; i += 1) {
+      if (this.images.length === this.imageMaxCount) {
+        this.shiftImage()
+      }
 
-        if (this.images.length === this.imageMaxCount) return
-      }
-      if (this.images.length < this.imageMaxCount) {
-        this.$uploader.appendChild(this.$trigger)
-      }
+      this.images.push(files[i])
+
+      const $item = this.createImageItem(this.images.length - 1, files[i])
+      this.$uploader.appendChild($item)
+
+      if (this.images.length === this.imageMaxCount) return
+    }
+    if (this.images.length < this.imageMaxCount) {
+      this.$uploader.appendChild(this.$trigger)
     }
   }
 
@@ -162,6 +198,13 @@ export default class Modal {
     this.images.splice(index, 1)
     if (this.images.length === this.imageMaxCount - 1) {
       this.$uploader.appendChild(this.$trigger)
+    }
+
+    const items = this.$wrap.querySelectorAll(
+      '.feedback-form-image'
+    ) as NodeListOf<Element>
+    for (let i = 0; i < items.length; i += 1) {
+      items[i].setAttribute('data-index', i.toString())
     }
   }
 
@@ -179,12 +222,14 @@ export default class Modal {
     const $item = document.createElement('div')
     $item.classList.add('feedback-form-image')
     $item.setAttribute('data-index', index.toString())
-    $item.addEventListener('click', this.handleRemoveImage.bind(null, $item))
 
     const $mask = document.createElement('div')
     $mask.classList.add('feedback-image-mask')
     $mask.innerHTML = iconRemove
     $item.appendChild($mask)
+
+    const $icon = $mask.querySelector('svg') as SVGElement
+    $icon.addEventListener('click', this.handleRemoveImage.bind(null, $item))
 
     const $img = document.createElement('img') as HTMLImageElement
     const reader = new FileReader()
@@ -251,9 +296,7 @@ export default class Modal {
     ) as NodeListOf<Element>
     for (let i = 0; i < items.length; i += 1) {
       const item = items[i]
-      if (item !== this.$trigger) {
-        ;(item.parentElement as HTMLDivElement).removeChild(item)
-      }
+      ;(item.parentElement as HTMLDivElement).removeChild(item)
     }
   }
 
