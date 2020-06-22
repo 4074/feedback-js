@@ -59,7 +59,7 @@ export default class Modal {
             </div>
             <div class="feedback-form-item">
               <div class="feedback-form-label">${strings.labels?.image}</div>
-              <input type="file" class="feedback-input-file" multiple />
+              <input type="file" class="feedback-input-file" multiple accept="image/jpg,image/jpeg,image/png,image/gif,video/mp4" />
               <div class="feedback-form-uploader">
                 <div class="feedback-form-image feedback-uploader-trigger">
                   ${iconImage}
