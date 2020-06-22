@@ -1,5 +1,7 @@
 import { requestAnimationFrame } from '../utils'
 import { iconImage, iconRemove, iconSpinner } from './icons'
+import Alert from './alert'
+
 import emitter from '../emitter'
 import { TRIGGER_CLICK } from './trigger'
 import {
@@ -25,6 +27,8 @@ export default class Modal {
   private $trigger: HTMLDivElement
 
   private $submit: HTMLButtonElement
+
+  private alert: Alert
 
   private hiding = false
 
@@ -71,10 +75,9 @@ export default class Modal {
             }
           </div>
           <div class="feedback-modal-footer">
-            <button class="feedback-submit-button">
-              <span class="feedback-submit-spinner">${iconSpinner}</span>
-              <span class="feedback-submit-text">${strings.submit}</span>  
-            </button>
+            <button class="feedback-submit-button"><span class="feedback-submit-spinner">${iconSpinner}</span><span class="feedback-submit-text">${
+      strings.submit
+    }</span></button>
           </div>
       </div>
     `
@@ -104,16 +107,28 @@ export default class Modal {
     ) as HTMLButtonElement
     this.$submit.addEventListener('click', this.handleSubmit)
 
+    this.alert = new Alert()
+    this.alert.render(this.$wrap)
+
     parent.appendChild(this.$element)
     emitter.on(TRIGGER_CLICK, this.toogle)
     emitter.on(SUBMITING_EVENT, () => {
-      this.$submit.classList.add('feedback-sumbit-loading')
+      this.$submit.classList.add(
+        'feedback-submit-disabled',
+        'feedback-submit-loading'
+      )
     })
     emitter.on(SUBMIT_SUCCESS_EVENT, () => {
-      this.$submit.classList.remove('feedback-sumbit-loading')
+      this.alert.show('success', '反馈成功', 2000)
+      this.$submit.classList.remove('feedback-submit-loading')
+      setTimeout(this.hide, 2000)
+      setTimeout(this.clear, 2300)
     })
     emitter.on(SUBMIT_FAIL_EVENT, () => {
-      // this.$submit.classList.remove('feedback-sumbit-loading')
+      this.$submit.classList.remove(
+        'feedback-submit-disabled',
+        'feedback-submit-loading'
+      )
     })
   }
 
@@ -151,6 +166,9 @@ export default class Modal {
   }
 
   handleSubmit = (): void => {
+    if (!this.$input.value) {
+      return this.alert.show('error', '请填写意见或建议')
+    }
     emitter.emit(MODAL_SUBMIT_EVENT, {
       files: this.images,
       message: this.$input.value
@@ -220,6 +238,23 @@ export default class Modal {
       this.$element.style.display = 'none'
       this.hiding = false
     }, 300)
+  }
+
+  clear = (): void => {
+    this.$input.value = ''
+
+    this.$submit.classList.remove('feedback-submit-disabled')
+
+    this.images = []
+    const items = this.$wrap.querySelectorAll(
+      '.feedback-form-image'
+    ) as NodeListOf<Element>
+    for (let i = 0; i < items.length; i += 1) {
+      const item = items[i]
+      if (item !== this.$trigger) {
+        ;(item.parentElement as HTMLDivElement).removeChild(item)
+      }
+    }
   }
 
   remove = (): void => {

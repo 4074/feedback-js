@@ -266,7 +266,7 @@
     
     .feedback-submit-button {
       position: relative;
-      width: 80px;
+      padding: 0 20px;
       height: 32px;
       display: block;
       margin: auto;
@@ -302,26 +302,31 @@
         pointer-events: none;
       }
 
-      &.feedback-sumbit-loading {
+      &.feedback-submit-disabled {
         pointer-events: none;
-        width: 102px;
 
         &::before {
           display: block;
         }
+      }
 
+      &.feedback-submit-loading {
         .feedback-submit-spinner {
-          width: 18px;
-          padding-right: 4px;
+          width: 22px;
+          padding-right: 8px;
+          opacity: 1;
+          transform: scale(1);
         }
       }
 
       .feedback-submit-spinner {
         display: inline-block;
+        vertical-align: middle;
         padding-right: 0;
         width: 0;
         overflow: hidden;
-        transform: translateY(4px);
+        opacity: 0;
+        transform: scale(0);
         transition: .2s;
         svg {
           animation: loadingCircle 1s infinite linear;
@@ -334,5 +339,53 @@
 @keyframes loadingCircle {
   100% {
     transform: rotate(360deg)
+  }
+}
+
+.feedback-alert {
+  position: absolute;
+  top: 15px;
+  right: 0;
+  transform: translateX(100%);
+  background-color: #f6ffed;
+  border: 1px solid #b7eb8f;
+  padding: 4px 12px;
+  line-height: 14px;
+  border-radius: 4px;
+  display: none;
+  transition: 0.2s;
+  opacity: 0;
+  
+  &.enter-end {
+    transform: translateX(-20px);
+    opacity: 1;
+  }
+
+  &.leave-end {
+    transform: translateX(-20px) translateY(-8px);
+    opacity: 0;
+  }
+
+  span {
+    vertical-align: middle;
+  }
+
+  .feedback-alert-message {
+    line-height: 14px;
+  }
+
+  .feedback-alert-icon {
+    color: #52c41a;
+    display: inline-block;
+    padding-top: 2px;
+    padding-right: 4px;
+  }
+
+  &.feedback-alert-error {
+    background-color: #fff2f0;
+    border-color: #ffccc7;
+    .feedback-alert-icon {
+      color: #ff4d4f;
+    }
   }
 }

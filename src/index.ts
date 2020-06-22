@@ -3,7 +3,7 @@ import request from './request'
 import Component from './renders'
 import { deepExtends } from './utils'
 import emitter from './emitter'
-import { MODAL_SUBMIT_EVENT } from './renders/modal'
+import { MODAL_SUBMIT_EVENT, MODAL_VISIBLE_CHANGE_EVENT } from './renders/modal'
 import { TRIGGER_CLICK } from './renders/trigger'
 
 export const SUBMITING_EVENT = 'SUBMITING_EVENT'
@@ -51,6 +51,7 @@ export default class Feedback {
     this.component.render(this.options.container || document.body)
 
     emitter.on(MODAL_SUBMIT_EVENT, this.submit)
+    emitter.on(MODAL_VISIBLE_CHANGE_EVENT, this.handleVisible)
     emitter.emit(TRIGGER_CLICK)
   }
 
@@ -64,6 +65,12 @@ export default class Feedback {
     this.__data = data
   }
 
+  private handleVisible = (visible: boolean): void => {
+    if (visible && this.options.url) {
+      request(this.options.url, this.generateRequestData('open'))
+    }
+  }
+
   private submit = ({
     files,
     message
@@ -71,10 +78,10 @@ export default class Feedback {
     files: File[]
     message: string
   }): void => {
-    const params = this.generateRequestData(message)
+    const params = this.generateRequestData('feedback', message)
     if (this.options.url) {
       emitter.emit(SUBMITING_EVENT)
-      request.upload(this.options.url, files, params).then(
+      request(this.options.url, params, files).then(
         (data) => {
           emitter.emit(SUBMIT_SUCCESS_EVENT, data)
         },
@@ -88,14 +95,18 @@ export default class Feedback {
     }
   }
 
-  private generateRequestData(message = ''): FeedbackRequestData {
+  private generateRequestData(
+    action: string,
+    message?: string
+  ): FeedbackRequestData {
     return {
       appId: this.appId,
       path: this.window.location.href,
       userAgent: this.window.navigator.userAgent,
-      message,
       user: this.__user,
       data: this.__data,
+      action,
+      message,
       timestamp: new Date().getTime()
     }
   }

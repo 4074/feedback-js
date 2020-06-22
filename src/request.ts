@@ -1,7 +1,7 @@
-function upload<T>(
+export default function request<T>(
   url: string,
-  files: File[],
-  params: StringKeyObj<any> = {}
+  params: StringKeyObj<any> = {},
+  files: File[] = []
 ): Promise<T> {
   const formData = new FormData()
   for (const file of files) {
@@ -18,8 +18,4 @@ function upload<T>(
   }
 
   return fetch(url, option).then((resp) => resp.json())
-}
-
-export default {
-  upload
 }
