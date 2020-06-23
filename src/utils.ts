@@ -56,6 +56,27 @@ export function setDeepValue(source: object, keys: string[], value: any): void {
   if (parent && typeof parent === 'object') parent[keys[index - 1]] = value
 }
 
+export function rgba(color: string, alpha = 1): string {
+  const hex = color.replace('#', '')
+  let rgb = []
+  if (hex.length === 3) {
+    rgb = hex.split('').map((h) => h + h)
+  } else if (hex.length === 6) {
+    rgb = hex.split('').reduce((arr, h, i) => {
+      if (i % 2) {
+        arr.push(arr.pop() + h)
+      } else {
+        arr.push(h)
+      }
+      return arr
+    }, [] as string[])
+  } else {
+    rgb = ['0', '0', '0']
+  }
+
+  return `rgba(${rgb.map((c) => parseInt(c, 16)).join(',')}, ${alpha})`
+}
+
 export function getMediaFromTransfer(transfer: DataTransfer): File[] {
   const data: File[] = []
   if (transfer) {

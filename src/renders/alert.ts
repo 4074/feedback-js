@@ -10,11 +10,13 @@ export default class Trigger {
 
   private $message: HTMLSpanElement
 
+  private hideTimer: any = null
+
   render(parent: Element): void {
     this.remove()
     this.$element = document.createElement('div')
     this.$element.classList.add('feedback-alert')
-    this.$element.innerHTML = `<span class="feedback-alert-icon">${iconSuccess}</span><span class="feedback-alert-message"></span>`
+    this.$element.innerHTML = `<span class="feedback-alert-icon">${iconSuccess}</span><span class="feedback-alert-message">反馈成功</span>`
     parent.appendChild(this.$element)
 
     this.$icon = this.$element.querySelector(
@@ -37,10 +39,11 @@ export default class Trigger {
     this.$element.classList.add(`feedback-alert-${type}`)
     this.$message.innerText = message || ''
 
+    clearTimeout(this.hideTimer)
     this.$element.style.display = 'block'
     requestAnimationFrame(() => {
       this.$element.classList.add('enter-end')
-      setTimeout(() => {
+      this.hideTimer = setTimeout(() => {
         this.$element.classList.add('leave-end')
         setTimeout(() => {
           this.$element.classList.remove('enter-end', 'leave-end')

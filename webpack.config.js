@@ -12,7 +12,7 @@ module.exports = (env = {}) => ({
   },
 
   output: {
-    filename: env.production ? `[name]-${packageJson.version}.js` : '[name].js',
+    filename: env.production && env.version ? `[name]-${packageJson.version}-[contenthash:8].js` : '[name].js',
     path: path.resolve(__dirname, 'build')
   },
 

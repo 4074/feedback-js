@@ -10,12 +10,16 @@
       font-family: -apple-system,BlinkMacSystemFont,segoe ui,Roboto,helvetica neue,Arial,noto sans,sans-serif,apple color emoji,segoe ui emoji,segoe ui symbol,noto color emoji;
     }
   </style>
-<script type="text/javascript" src="feedback-0.1.0.js"></script></head>
+<script type="text/javascript" src="feedback.js"></script></head>
 
 <body>
   <div id="root"></div>
 </body>
 <script type="text/javascript" defer>
-  Feedback.init('W120121320')
+  Feedback.init('Test', {
+    url: 'http://localhost:9033/receiveFeedback',
+    primaryColor: '#4f43af'
+  })
+  Feedback.user('wenfeng')
 </script>
 </html>

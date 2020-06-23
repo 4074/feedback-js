@@ -3,15 +3,20 @@ import request from './request'
 import Component from './renders'
 import { deepExtends } from './utils'
 import emitter from './emitter'
+
 import { MODAL_SUBMIT_EVENT, MODAL_VISIBLE_CHANGE_EVENT } from './renders/modal'
-import { TRIGGER_CLICK } from './renders/trigger'
 
 export const SUBMITING_EVENT = 'SUBMITING_EVENT'
 export const SUBMIT_SUCCESS_EVENT = 'SUBMIT_SUCCESS_EVENT'
 export const SUBMIT_FAIL_EVENT = 'SUBMIT_FAIL_EVENT'
 
 const defaults: FeedbackOptions = {
-  url: '',
+  container: () => document.body,
+  url: 'https://utest.nie.netease.com:9033/receiveFeedback',
+  primaryColor: '#1890ff',
+  bottom: 48,
+  right: 48,
+  size: 48,
   strings: {
     title: '意见反馈',
     submit: '提 交',
@@ -23,7 +28,7 @@ const defaults: FeedbackOptions = {
       input: '请输入',
       image: '上传或粘贴图片'
     },
-    contact: '还可以直接联系我们：XXX'
+    contact: '或者直接联系管理员'
   }
 }
 
@@ -44,15 +49,18 @@ export default class Feedback {
     this.window = window
   }
 
-  init(appId: string, options: FeedbackOptions = {}): void {
+  init(appId: string, options: FeedbackOptions = defaults): void {
     this.options = deepExtends(defaults, options)
     this.appId = appId
     this.component = new Component(this.options)
-    this.component.render(this.options.container || document.body)
+    if (typeof this.options.container === 'function') {
+      this.component.render(this.options.container())
+    } else {
+      this.component.render(this.options.container)
+    }
 
     emitter.on(MODAL_SUBMIT_EVENT, this.submit)
     emitter.on(MODAL_VISIBLE_CHANGE_EVENT, this.handleVisible)
-    emitter.emit(TRIGGER_CLICK)
   }
 
   user(data: string): any {

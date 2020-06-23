@@ -14,9 +14,13 @@ declare namespace Model {
 }
 
 declare interface FeedbackOptions {
-  url?: string
-  container?: Element
-  strings?: FeedbackStrings
+  url: string
+  primaryColor: string
+  bottom: number
+  right: number
+  size: number
+  container: Element | (() => Element)
+  strings: FeedbackStrings
 }
 
 interface FeedbackStrings {

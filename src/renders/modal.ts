@@ -149,6 +149,7 @@ export default class Modal {
       setTimeout(this.clear, 2300)
     })
     emitter.on(SUBMIT_FAIL_EVENT, () => {
+      this.alert.show('error', '提交失败，请稍后重试')
       this.$submit.classList.remove(
         'feedback-submit-disabled',
         'feedback-submit-loading'
@@ -201,6 +202,7 @@ export default class Modal {
   }
 
   handleUploadStart = (): void => {
+    this.$file.value = ''
     this.$file.click()
   }
 

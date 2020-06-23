@@ -1,5 +1,6 @@
 import Modal from './modal'
 import Trigger from './trigger'
+import theme from './theme'
 
 import './style.scss'
 
@@ -17,13 +18,14 @@ export default class Component {
   }
 
   render(parent: Element): void {
+    if (this.options.primaryColor) theme.set(this.options)
+
     this.$conainer = document.createElement('div')
     this.$conainer.classList.add('feedback-container')
     parent.appendChild(this.$conainer)
 
     this.modal = new Modal()
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    this.modal.render(this.$conainer, this.options.strings!)
+    this.modal.render(this.$conainer, this.options.strings)
 
     this.trigger = new Trigger()
     this.trigger.render(this.$conainer)
