@@ -304,7 +304,6 @@ export default class Modal {
 
     this.$submit.classList.remove('feedback-submit-disabled')
 
-    this.images = []
     const items = this.$wrap.querySelectorAll(
       '.feedback-form-image'
     ) as NodeListOf<Element>
@@ -312,6 +311,11 @@ export default class Modal {
       const item = items[i]
       ;(item.parentElement as HTMLDivElement).removeChild(item)
     }
+
+    if (this.images.length === this.imageMaxCount) {
+      this.$uploader.append(this.$trigger)
+    }
+    this.images = []
   }
 
   remove = (): void => {
