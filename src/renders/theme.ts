@@ -8,17 +8,17 @@ class Theme {
     const { primaryColor, bottom, right, size } = options
     if (!this.$style) {
       this.$style = document.createElement('style')
-      const $body = document.querySelector('body')!
-      $body.append(this.$style)
+      const $head = document.querySelector('head')!
+      $head.append(this.$style)
     }
     const color = rgba(primaryColor)
     this.$style.innerHTML = `
       .feedback-container {
         right: ${right}px;
+        bottom: ${bottom + 68}px;
       }
       .feedback-container .feedback-trigger {
         color: ${color};
-        bottom: ${bottom - 116}px;
         width: ${size}px;
         height: ${size}px;
       }

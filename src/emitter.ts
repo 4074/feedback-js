@@ -16,6 +16,14 @@ export class EventEmitter {
     }
   }
 
+  remove(name: string): void {
+    this.handleMap.delete(name)
+  }
+
+  removeAll(): void {
+    this.handleMap = new Map()
+  }
+
   emit(name: string, data?: any): void {
     const handles = this.handleMap.get(name)
     if (!handles) return

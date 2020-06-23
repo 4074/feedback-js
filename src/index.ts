@@ -33,6 +33,8 @@ const defaults: FeedbackOptions = {
 }
 
 export default class Feedback {
+  version = '0.1.0'
+
   private appId: string
 
   private __user: string
@@ -50,6 +52,8 @@ export default class Feedback {
   }
 
   init(appId: string, options: FeedbackOptions = defaults): void {
+    this.destory()
+
     this.options = deepExtends(defaults, options)
     this.appId = appId
     this.component = new Component(this.options)
@@ -61,6 +65,13 @@ export default class Feedback {
 
     emitter.on(MODAL_SUBMIT_EVENT, this.submit)
     emitter.on(MODAL_VISIBLE_CHANGE_EVENT, this.handleVisible)
+  }
+
+  destory(): void {
+    emitter.removeAll()
+    if (this.component) {
+      this.component.destory()
+    }
   }
 
   user(data: string): any {

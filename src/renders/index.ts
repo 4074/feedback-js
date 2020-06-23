@@ -30,4 +30,10 @@ export default class Component {
     this.trigger = new Trigger()
     this.trigger.render(this.$conainer)
   }
+
+  destory(): void {
+    if (this.$conainer && this.$conainer.parentElement) {
+      this.$conainer.parentElement.removeChild(this.$conainer)
+    }
+  }
 }
