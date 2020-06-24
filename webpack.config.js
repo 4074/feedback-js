@@ -31,7 +31,16 @@ module.exports = (env = {}) => ({
       {
         test: /\.s(a|c)ss$/,
         use: [
-          {loader: 'style-loader', options: { attributes: { type: 'text/css', id: 'feedback-style-initial' } }},
+          {
+            loader: 'style-loader',
+            options: {
+              attributes: { type: 'text/css', id: 'feedback-style-initial' },
+              insert: function(element) {
+                const parent = document.querySelector('head')
+                parent.insertBefore(element, parent.firstChild)
+              }
+            }
+          },
           'css-loader',
           {
             loader: 'postcss-loader',

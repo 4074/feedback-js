@@ -86,7 +86,7 @@ export function getMediaFromTransfer(transfer: DataTransfer): File[] {
         const item = items[i]
         if (item.kind === 'file') {
           const file = item.getAsFile() as File
-          if (/(^image\/|^video\/mp4)/.test(file.type)) {
+          if (/^image\//.test(file.type)) {
             data.push(file)
           }
         }
@@ -94,7 +94,7 @@ export function getMediaFromTransfer(transfer: DataTransfer): File[] {
     } else {
       for (let i = 0; i < files.length; i += 1) {
         const file = files[i]
-        if (/(^image\/|^video\/mp4)/.test(file.type)) {
+        if (/^image\//.test(file.type)) {
           data.push(file)
         }
       }
