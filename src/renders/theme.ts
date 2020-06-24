@@ -6,11 +6,21 @@ class Theme {
 
   set(options: FeedbackOptions): void {
     const { primaryColor, bottom, right, size } = options
+
     if (!this.$style) {
       this.$style = document.createElement('style')
-      const $head = document.querySelector('head')!
-      $head.append(this.$style)
+      this.$style.setAttribute('type', 'text/css')
+      this.$style.setAttribute('id', 'feedback-style-custom')
+
+      const $wrap = document.querySelector('head') || document.body
+      const $initial = $wrap.querySelector('#feedback-style-initial')
+      if ($initial) {
+        $wrap.insertBefore(this.$style, $initial.nextSibling)
+      } else {
+        $wrap.append(this.$style)
+      }
     }
+
     const color = rgba(primaryColor)
     this.$style.innerHTML = `
       .feedback-container {
@@ -38,7 +48,7 @@ class Theme {
       .feedback-container .feedback-modal .feedback-modal-footer .feedback-submit-button:hover:enabled {
         background: ${rgba(primaryColor, 0.8)};
       }
-    `
+    `.replace(/\s{2,}/g, '')
   }
 
   remove(): void {

@@ -31,7 +31,7 @@ module.exports = (env = {}) => ({
       {
         test: /\.s(a|c)ss$/,
         use: [
-          'style-loader',
+          {loader: 'style-loader', options: { attributes: { type: 'text/css', id: 'feedback-style-initial' } }},
           'css-loader',
           {
             loader: 'postcss-loader',
