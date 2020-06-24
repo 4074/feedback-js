@@ -11,12 +11,13 @@ export const SUBMIT_SUCCESS_EVENT = 'SUBMIT_SUCCESS_EVENT'
 export const SUBMIT_FAIL_EVENT = 'SUBMIT_FAIL_EVENT'
 
 const defaults: FeedbackOptions = {
-  container: () => document.body,
-  url: 'https://utest.nie.netease.com:9033/receiveFeedback',
-  primaryColor: '#1890ff',
-  bottom: 48,
-  right: 48,
-  size: 48,
+  server: 'https://utest.nie.netease.com:9033/receiveFeedback',
+  style: {
+    primaryColor: '#1890ff',
+    bottom: 48,
+    right: 48,
+    size: 48
+  },
   strings: {
     title: '意见反馈',
     submit: '提 交',
@@ -57,11 +58,7 @@ export default class Feedback {
     this.options = deepExtends(defaults, options)
     this.appId = appId
     this.component = new Component(this.options)
-    if (typeof this.options.container === 'function') {
-      this.component.render(this.options.container())
-    } else {
-      this.component.render(this.options.container)
-    }
+    this.component.render(this.options.container || document.body)
 
     emitter.on(MODAL_SUBMIT_EVENT, this.submit)
     emitter.on(MODAL_VISIBLE_CHANGE_EVENT, this.handleVisible)
@@ -85,8 +82,8 @@ export default class Feedback {
   }
 
   private handleVisible = (visible: boolean): void => {
-    if (visible && this.options.url) {
-      request(this.options.url, this.generateRequestData('open'))
+    if (visible && this.options.server) {
+      request(this.options.server, this.generateRequestData('open'))
     }
   }
 
@@ -98,9 +95,9 @@ export default class Feedback {
     message: string
   }): void => {
     const params = this.generateRequestData('feedback', message)
-    if (this.options.url) {
+    if (this.options.server) {
       emitter.emit(SUBMITING_EVENT)
-      request(this.options.url, params, files).then(
+      request(this.options.server, params, files).then(
         (data) => {
           emitter.emit(SUBMIT_SUCCESS_EVENT, data)
         },

@@ -4,8 +4,8 @@ import { rgba } from '../utils'
 class Theme {
   private $style: HTMLStyleElement
 
-  set(options: FeedbackOptions): void {
-    const { primaryColor, bottom, right, size } = options
+  set(style: FeedbackStyle): void {
+    const { primaryColor, bottom, right, size } = style
 
     if (!this.$style) {
       this.$style = document.createElement('style')

@@ -18,7 +18,7 @@ export default class Component {
   }
 
   render(parent: Element): void {
-    if (this.options.primaryColor) theme.set(this.options)
+    theme.set(this.options.style)
 
     this.$conainer = document.createElement('div')
     this.$conainer.classList.add('feedback-container')
