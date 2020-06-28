@@ -1,9 +1,12 @@
 import request from './request'
-import Component from './renders'
+import Component from './component'
 import { deepExtends } from './utils'
 import emitter from './emitter'
 
-import { MODAL_SUBMIT_EVENT, MODAL_VISIBLE_CHANGE_EVENT } from './renders/modal'
+import {
+  MODAL_SUBMIT_EVENT,
+  MODAL_VISIBLE_CHANGE_EVENT
+} from './component/modal'
 
 export const SUBMITING_EVENT = 'SUBMITING_EVENT'
 export const SUBMIT_SUCCESS_EVENT = 'SUBMIT_SUCCESS_EVENT'
