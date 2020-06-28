@@ -3,7 +3,7 @@
 ## 使用
 引入 Javascript 文件
 ```html
-<script type="text/javascript" src="https://utest.nie.netease.com:9033/js/feedback.js"></script>
+<script type="text/javascript" src="https://some-host.com/js/feedback.js"></script>
 ```
 
 Javascript 代码中进行初始化
