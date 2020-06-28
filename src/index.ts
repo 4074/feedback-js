@@ -10,7 +10,7 @@ export const SUBMIT_SUCCESS_EVENT = 'SUBMIT_SUCCESS_EVENT'
 export const SUBMIT_FAIL_EVENT = 'SUBMIT_FAIL_EVENT'
 
 const defaults: FeedbackOptions = {
-  server: 'https://utest.nie.netease.com:9033/receiveFeedback',
+  server: '',
   style: {
     primaryColor: '#1890ff',
     bottom: 48,
