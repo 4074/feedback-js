@@ -25,8 +25,8 @@ Feedback.data() // 获取
 初始参数，可在 options 设置对应字段进行覆盖。
 ```typescript
 const defaults: FeedbackOptions = {
-  // 接收数据的接口
-  server: 'https://utest.nie.netease.com:9033/receiveFeedback',
+  // 接收数据的接口，默认为空
+  server: '',
 
   // 可调整的样式
   style: {
@@ -54,3 +54,13 @@ const defaults: FeedbackOptions = {
 ```
 
 如果需要更加定制化的样式，请编写 css 覆盖默认的样式。
+
+## 开发/构建
+
+```bash
+# 开发，可传入默认的接收数据接口
+npm start --server=http://your-host.com/receive-feedback-data
+
+# 构建，可传入默认的接收数据接口
+npm build --server=http://your-host.com/receive-feedback-data
+```

@@ -1,8 +1,22 @@
 const path = require('path')
+const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const autoprefixer = require('autoprefixer')
 const packageJson = require('./package.json')
+
+function getValueFromArgs(name, args) {
+  const prefix = `--${name}=`
+  for (let i = 0; i < args.original.length; i += 1) {
+    if (args.original[i].indexOf(prefix) === 0) {
+      return args.original[i].replace(prefix, '')
+    }
+  }
+}
+const defaultServer = getValueFromArgs(
+  'server',
+  JSON.parse(process.env.npm_config_argv)
+) || ''
 
 module.exports = (env = {}) => ({
   mode: env.production ? 'production' : 'development',
@@ -59,6 +73,9 @@ module.exports = (env = {}) => ({
   },
 
   plugins: [
+    new webpack.DefinePlugin({
+      DefaultServer: JSON.stringify(defaultServer),
+    }),
     new HtmlWebpackPlugin({
       template: 'index.html',
       inject: 'head'

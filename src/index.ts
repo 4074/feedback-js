@@ -10,7 +10,7 @@ export const SUBMIT_SUCCESS_EVENT = 'SUBMIT_SUCCESS_EVENT'
 export const SUBMIT_FAIL_EVENT = 'SUBMIT_FAIL_EVENT'
 
 const defaults: FeedbackOptions = {
-  server: '',
+  server: DefaultServer,
   style: {
     primaryColor: '#1890ff',
     bottom: 48,
@@ -105,11 +105,11 @@ export default class Feedback {
   }
 
   private submit = ({
-    files,
-    message
+    message,
+    files
   }: {
-    files: File[]
     message: string
+    files: File[]
   }): void => {
     const params = this.generateRequestData('feedback', message)
     if (this.options.server) {
@@ -125,7 +125,7 @@ export default class Feedback {
     } else {
       // If no server be set, print the feedback data on console.
       // eslint-disable-next-line no-console
-      console.log(files, params)
+      console.log(params, files)
     }
   }
 

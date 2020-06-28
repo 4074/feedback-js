@@ -1,4 +1,5 @@
 declare module '*.svg'
+declare const DefaultServer: string
 
 declare type StringKeyObj<T> = {
   [key in string]: T

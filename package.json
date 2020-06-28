@@ -8,11 +8,10 @@
   },
   "scripts": {
     "start": "webpack-dev-server",
-    "lint": "tsc --noEmit && eslint */**/*.{ts,tsx} --quiet --fix",
+    "lint": "tsc --noEmit && eslint */**/*.ts --quiet --fix",
     "test": "jest",
     "build": "npm run lint && npm run test && webpack --env.production=true",
-    "buildVersion": "npm run lint && npm run test && webpack --env.production=true --env.version=true",
-    "buildForce": "npm run test && webpack --env.production=true"
+    "build-version": "npm run lint && npm run test && webpack --env.production=true --env.version=true"
   },
   "repository": {
     "type": "git",
