@@ -1,4 +1,6 @@
-/* eslint-disable no-unused-expressions */
+/**
+ * A simple Event Emitter implement
+ */
 export class EventEmitter {
   private handleMap: Map<string, Map<symbol, Function>>
 
@@ -6,6 +8,11 @@ export class EventEmitter {
     this.handleMap = new Map()
   }
 
+  /**
+   * Add a event listener
+   * @param name string Event name
+   * @param handle function Callback functon
+   */
   on(name: string, handle: Function): Function {
     if (!this.handleMap.has(name)) this.handleMap.set(name, new Map())
     const key = Symbol(name)
@@ -16,14 +23,26 @@ export class EventEmitter {
     }
   }
 
+  /**
+   * Remove a event listener
+   * @param name Event name
+   */
   remove(name: string): void {
     this.handleMap.delete(name)
   }
 
+  /**
+   * Remove all listeners
+   */
   removeAll(): void {
     this.handleMap = new Map()
   }
 
+  /**
+   * Emit a event
+   * @param name string Event name
+   * @param data any The data of event
+   */
   emit(name: string, data?: any): void {
     const handles = this.handleMap.get(name)
     if (!handles) return

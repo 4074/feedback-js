@@ -1,4 +1,3 @@
-/* eslint-disable class-methods-use-this */
 import request from './request'
 import Component from './renders'
 import { deepExtends } from './utils'
@@ -52,6 +51,11 @@ export default class Feedback {
     this.window = window
   }
 
+  /**
+   * Setup feedback plugin
+   * @param appId string The appId of current app
+   * @param options object Custom options
+   */
   init(appId: string, options: FeedbackOptions = defaults): void {
     this.destory()
 
@@ -64,6 +68,9 @@ export default class Feedback {
     emitter.on(MODAL_VISIBLE_CHANGE_EVENT, this.handleVisible)
   }
 
+  /**
+   * Destory feedback plugin
+   */
   destory(): void {
     emitter.removeAll()
     if (this.component) {
@@ -71,11 +78,21 @@ export default class Feedback {
     }
   }
 
+  /**
+   * Get/Set user info
+   * @param data string The user info
+   * @returns any/void The user info
+   */
   user(data: string): any {
     if (data === undefined) return this.__user
     this.__user = data
   }
 
+  /**
+   * Get/Set custom info
+   * @param data any The custom info
+   * @returns data/void The custom info
+   */
   data(data: any): any {
     if (data === undefined) return this.__data
     this.__data = data
@@ -106,6 +123,7 @@ export default class Feedback {
         }
       )
     } else {
+      // If no server be set, print the feedback data on console.
       // eslint-disable-next-line no-console
       console.log(files, params)
     }

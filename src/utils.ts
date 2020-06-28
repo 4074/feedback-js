@@ -1,10 +1,10 @@
 /* eslint-disable import/prefer-default-export */
+
 /**
  * Generates a uuid v4 from https://gist.github.com/jed/982883
  * @param a any The char should be replace with 0~f
- * @api public
+ * @returns string
  */
-
 export function uuid(a?: any): string {
   return a
     ? // eslint-disable-next-line no-bitwise
@@ -12,6 +12,10 @@ export function uuid(a?: any): string {
     : [1e7, -1e3, -4e3, -8e3, -1e11].join('').replace(/[018]/g, uuid)
 }
 
+/**
+ * Set a timeout callback after one frame
+ * @param fn function The timeout callback
+ */
 export function requestAnimationFrame(fn: () => void): void {
   if (window.requestAnimationFrame) {
     window.requestAnimationFrame(fn)
@@ -20,6 +24,12 @@ export function requestAnimationFrame(fn: () => void): void {
   }
 }
 
+/**
+ * Extends a object deeply
+ * @param defaults object The default object
+ * @param custom object The custom object
+ * @returns object
+ */
 export function deepExtends<T extends object>(defaults: T, custom: T): T {
   const result: any = {}
   for (const key of Object.keys(defaults)) {
@@ -42,6 +52,12 @@ export function deepExtends<T extends object>(defaults: T, custom: T): T {
   return result as T
 }
 
+/**
+ * Set a value by deep key in object
+ * @param source object The origin object
+ * @param keys array The linked keys
+ * @param value any The value be set
+ */
 export function setDeepValue(source: object, keys: string[], value: any): void {
   let node: any = source
   let parent: any = source
@@ -56,6 +72,12 @@ export function setDeepValue(source: object, keys: string[], value: any): void {
   if (parent && typeof parent === 'object') parent[keys[index - 1]] = value
 }
 
+/**
+ * Convert hex color and alpha value to rgba formatted string
+ * @param color string Hex color value
+ * @param alpha number Alpha value
+ * @returns string
+ */
 export function rgba(color: string, alpha = 1): string {
   const hex = color.replace('#', '')
   let rgb = []
@@ -77,6 +99,11 @@ export function rgba(color: string, alpha = 1): string {
   return `rgba(${rgb.map((c) => parseInt(c, 16)).join(',')}, ${alpha})`
 }
 
+/**
+ * Get media file from data transfer
+ * @param transfer DataTransfer The file data transfer
+ * @returns array The files
+ */
 export function getMediaFromTransfer(transfer: DataTransfer): File[] {
   const data: File[] = []
   if (transfer) {

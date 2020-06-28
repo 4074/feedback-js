@@ -23,6 +23,8 @@ module.exports = {
         "jsx": "never",
         "ts": "never",
         "tsx": "never"
-      }]
+      }
+    ],
+    'no-unused-expressions': ['off']
   }
 }
