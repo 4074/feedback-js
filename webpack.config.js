@@ -50,6 +50,10 @@ module.exports = (env = {}) => ({
           },
           'sass-loader'
         ]
+      },
+      {
+        test: /.svg$/,
+        loader: 'svg-inline-loader'
       }
     ]
   },

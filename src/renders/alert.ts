@@ -1,5 +1,5 @@
 import { requestAnimationFrame } from '../utils'
-import { iconSuccess, iconError } from './icons'
+import { iconSuccess, iconError } from '../icons'
 
 export const TRIGGER_CLICK = 'TRIGGER_CLICK'
 

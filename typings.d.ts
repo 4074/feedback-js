@@ -1,3 +1,5 @@
+declare module '*.svg'
+
 declare type StringKeyObj<T> = {
   [key in string]: T
 }

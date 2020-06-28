@@ -1,4 +1,4 @@
-import { iconFeedback, iconClose } from './icons'
+import { iconClose, iconFeedback } from '../icons'
 import emitter from '../emitter'
 import { MODAL_VISIBLE_CHANGE_EVENT } from './modal'
 

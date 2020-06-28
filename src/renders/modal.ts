@@ -1,5 +1,5 @@
 import { requestAnimationFrame, getMediaFromTransfer } from '../utils'
-import { iconImage, iconRemove, iconSpinner } from './icons'
+import { iconImage, iconRemove, iconSpinner } from '../icons'
 import Alert from './alert'
 
 import emitter from '../emitter'
