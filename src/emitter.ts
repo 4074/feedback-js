@@ -2,10 +2,10 @@
  * A simple Event Emitter implement
  */
 export class EventEmitter {
-  private handleMap: Map<string, Map<symbol, Function>>
+  private handlers: Map<string, Map<symbol, Function>>
 
   constructor() {
-    this.handleMap = new Map()
+    this.handlers = new Map()
   }
 
   /**
@@ -13,13 +13,13 @@ export class EventEmitter {
    * @param name string Event name
    * @param handle function Callback functon
    */
-  on(name: string, handle: Function): Function {
-    if (!this.handleMap.has(name)) this.handleMap.set(name, new Map())
+  on(name: string, handler: Function): Function {
+    if (!this.handlers.has(name)) this.handlers.set(name, new Map())
     const key = Symbol(name)
-    this.handleMap.get(name)?.set(key, handle)
+    this.handlers.get(name)?.set(key, handler)
 
     return (): void => {
-      this.handleMap.get(name)?.delete(key)
+      this.handlers.get(name)?.delete(key)
     }
   }
 
@@ -28,14 +28,14 @@ export class EventEmitter {
    * @param name Event name
    */
   remove(name: string): void {
-    this.handleMap.delete(name)
+    this.handlers.delete(name)
   }
 
   /**
    * Remove all listeners
    */
   removeAll(): void {
-    this.handleMap = new Map()
+    this.handlers = new Map()
   }
 
   /**
@@ -44,10 +44,10 @@ export class EventEmitter {
    * @param data any The data of event
    */
   emit(name: string, data?: any): void {
-    const handles = this.handleMap.get(name)
-    if (!handles) return
-    for (const handle of handles.values()) {
-      handle(data)
+    const currentHandlers = this.handlers.get(name)
+    if (!currentHandlers) return
+    for (const handler of currentHandlers.values()) {
+      handler(data)
     }
   }
 }
