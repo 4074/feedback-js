@@ -30,23 +30,21 @@ export function requestAnimationFrame(fn: () => void): void {
  * @param custom object The custom object
  * @returns object
  */
-export function deepExtends<T extends object>(defaults: T, custom: T): T {
+export function deepExtends<T extends R, R extends { [key: string]: any }>(
+  defaults: T,
+  custom: R
+): T {
   const result: any = {}
   for (const key of Object.keys(defaults)) {
-    if (typeof (defaults as any)[key] === 'object') {
-      if (custom && (custom as any)[key]) {
-        result[key] = deepExtends(
-          (defaults as any)[key],
-          custom && (custom as any)[key]
-        )
+    if (typeof defaults[key] === 'object') {
+      if (custom && custom[key]) {
+        result[key] = deepExtends(defaults[key], custom && custom[key])
       } else {
-        result[key] = (defaults as any)[key]
+        result[key] = defaults[key]
       }
     } else {
       result[key] =
-        custom && (custom as any)[key]
-          ? (custom as any)[key]
-          : (defaults as any)[key]
+        custom && custom[key] !== undefined ? custom[key] : defaults[key]
     }
   }
   return result as T
