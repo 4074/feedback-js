@@ -42,7 +42,7 @@ export default class Feedback {
 
   private __user: string
 
-  private __data: any
+  private __data: Record<string, any> = {}
 
   private component?: Component
 
@@ -92,13 +92,21 @@ export default class Feedback {
   }
 
   /**
-   * Get/Set custom info
-   * @param data any The custom info
-   * @returns data/void The custom info
+   * Get custom data
+   * @param key string
+   * @param value any
    */
-  data(data: any): any {
-    if (data === undefined) return this.__data
-    this.__data = data
+  getData(key: string): any {
+    return this.__data[key]
+  }
+
+  /**
+   * Set custom data
+   * @param key string
+   * @param value any
+   */
+  setData(key: string, value: any): void {
+    this.__data[key] = value
   }
 
   private handleVisible = (visible: boolean): void => {
@@ -138,10 +146,8 @@ export default class Feedback {
   ): FeedbackRequestData {
     return {
       appId: this.appId,
-      path: this.window.location.href,
-      userAgent: this.window.navigator.userAgent,
       user: this.__user,
-      data: this.__data,
+      data: JSON.stringify(this.__data),
       action,
       message,
       timestamp: new Date().getTime()

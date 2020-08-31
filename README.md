@@ -15,9 +15,9 @@ Feedback.init(appId, options)
 Feedback.user('东子') // 设置用户
 Feedback.user() // 获取当前的用户：东子
 
-// 也可以设置额外数据，对象类型
-Feedback.data({alias: '东哥'}) // 设置
-Feedback.data() // 获取
+// 也可以设置额外数据
+Feedback.setData('alias', '东哥') // 设置
+Feedback.getData('alias') // 获取
 ```
 
 ## 参数

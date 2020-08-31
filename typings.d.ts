@@ -46,8 +46,7 @@ interface FeedbackStrings {
 
 interface FeedbackRequestData {
   appId: string
-  path: string
-  userAgent: string
+  path?: string
   user?: any
   data?: any
   action: string
