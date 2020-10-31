@@ -3,10 +3,7 @@ import Component from './component'
 import { deepExtends } from './utils'
 import emitter from './emitter'
 
-import {
-  MODAL_SUBMIT_EVENT,
-  MODAL_VISIBLE_CHANGE_EVENT
-} from './component/modal'
+import { MODAL_SUBMIT_EVENT } from './component/modal'
 
 export const SUBMITING_EVENT = 'SUBMITING_EVENT'
 export const SUBMIT_SUCCESS_EVENT = 'SUBMIT_SUCCESS_EVENT'
@@ -68,7 +65,6 @@ export default class Feedback {
     this.component.render(this.options.container || document.body)
 
     emitter.on(MODAL_SUBMIT_EVENT, this.submit)
-    emitter.on(MODAL_VISIBLE_CHANGE_EVENT, this.handleVisible)
   }
 
   /**
@@ -109,19 +105,11 @@ export default class Feedback {
     this.__data[key] = value
   }
 
-  private handleVisible = (visible: boolean): void => {
-    if (visible && this.options.server) {
-      request(this.options.server, this.generateRequestData('open'))
-    }
-  }
-
-  private submit = ({
-    message,
-    files
-  }: {
-    message: string
-    files: File[]
-  }): void => {
+  /**
+   * Submit the feedback
+   * @param params object
+   */
+  submit({ message, files }: { message: string; files: File[] }): void {
     const params = this.generateRequestData('feedback', message)
     if (this.options.server) {
       emitter.emit(SUBMITING_EVENT)
