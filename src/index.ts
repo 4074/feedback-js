@@ -1,6 +1,6 @@
 import request from './request'
 import Component from './component'
-import { deepExtends } from './utils'
+import { deepExtends, uuid } from './utils'
 import emitter from './emitter'
 
 import { MODAL_SUBMIT_EVENT } from './component/modal'
@@ -8,6 +8,8 @@ import { MODAL_SUBMIT_EVENT } from './component/modal'
 export const SUBMITING_EVENT = 'SUBMITING_EVENT'
 export const SUBMIT_SUCCESS_EVENT = 'SUBMIT_SUCCESS_EVENT'
 export const SUBMIT_FAIL_EVENT = 'SUBMIT_FAIL_EVENT'
+
+const USER_STORAGE_KEY = 'FEEDBACK_USER'
 
 const defaults: FeedbackOptions = {
   server: DefaultServer,
@@ -61,6 +63,13 @@ export default class Feedback {
 
     this.options = deepExtends(defaults, options)
     this.appId = appId
+
+    this.__user = uuid()
+    if (window.localStorage) {
+      this.__user = window.localStorage.getItem(USER_STORAGE_KEY) || this.__user
+      window.localStorage.setItem(USER_STORAGE_KEY, this.__user)
+    }
+
     this.component = new Component(this.options)
     this.component.render(this.options.container || document.body)
 
@@ -85,6 +94,8 @@ export default class Feedback {
   user(data: string): any {
     if (data === undefined) return this.__user
     this.__user = data
+    if (window.localStorage)
+      window.localStorage.setItem(USER_STORAGE_KEY, this.__user)
   }
 
   /**
@@ -109,7 +120,7 @@ export default class Feedback {
    * Submit the feedback
    * @param params object
    */
-  submit({ message, files }: { message: string; files: File[] }): void {
+  submit = ({ message, files }: { message: string; files: File[] }): void => {
     const params = this.generateRequestData('feedback', message)
     if (this.options.server) {
       emitter.emit(SUBMITING_EVENT)
@@ -125,6 +136,7 @@ export default class Feedback {
       // If no server be set, print the feedback data on console.
       // eslint-disable-next-line no-console
       console.log(params, files)
+      emitter.emit(SUBMIT_FAIL_EVENT, Error('No server.'))
     }
   }
 
