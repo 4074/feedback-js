@@ -27,7 +27,8 @@ export default function request<T>(
   const option: RequestInit = {
     method: 'POST',
     mode: 'cors',
-    body: formData
+    body: formData,
+    referrerPolicy: 'no-referrer-when-downgrade'
   }
 
   return fetch(url, option).then((resp) => resp.json())
