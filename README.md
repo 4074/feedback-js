@@ -67,5 +67,5 @@ const defaults: FeedbackOptions = {
 npm start --server=http://your-host.com/receive-feedback-data
 
 # 构建，可传入默认的接收数据接口
-npm build --server=http://your-host.com/receive-feedback-data
+npm run build --server=http://your-host.com/receive-feedback-data
 ```
