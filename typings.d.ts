@@ -41,6 +41,11 @@ interface FeedbackStrings {
     input?: string
     image?: string
   }
+  tips?: {
+    noMessage?: string
+    success?: string
+    fail?: string
+  }
   contact?: string
 }
 

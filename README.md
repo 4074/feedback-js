@@ -48,6 +48,11 @@ const defaults: FeedbackOptions = {
       input: '请输入',
       image: '上传或粘贴图片'
     },
+    tips: {
+      noMessage: '请填写意见或建议',
+      success: '反馈成功',
+      fail: '提交失败，请稍后重试'
+    },
     contact: '或者直接联系管理员'
   }
 }

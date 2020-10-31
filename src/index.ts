@@ -30,6 +30,11 @@ const defaults: FeedbackOptions = {
       input: '请输入',
       image: '上传或粘贴图片'
     },
+    tips: {
+      noMessage: '请填写意见或建议',
+      success: '反馈成功',
+      fail: '提交失败，请稍后重试'
+    },
     contact: '或者直接联系管理员'
   }
 }
@@ -136,7 +141,10 @@ export default class Feedback {
       // If no server be set, print the feedback data on console.
       // eslint-disable-next-line no-console
       console.log(params, files)
-      emitter.emit(SUBMIT_FAIL_EVENT, Error('No server.'))
+      const error = Error('No server specified in the options')
+      emitter.emit(SUBMIT_FAIL_EVENT, error)
+      // eslint-disable-next-line no-console
+      console.error(error)
     }
   }
 

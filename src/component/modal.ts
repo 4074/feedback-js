@@ -28,6 +28,8 @@ export default class Modal {
 
   private $submit: HTMLButtonElement
 
+  private strings: FeedbackStrings
+
   private alert: Alert
 
   private hiding = false
@@ -43,6 +45,7 @@ export default class Modal {
   maskClosable = true
 
   render(parent: Element, strings: FeedbackStrings): void {
+    this.strings = strings
     this.remove()
     this.$element = document.createElement('div')
     this.$element.classList.add('feedback-modal-container')
@@ -143,13 +146,15 @@ export default class Modal {
       )
     })
     emitter.on(SUBMIT_SUCCESS_EVENT, () => {
-      this.alert.show('success', '反馈成功', 2000)
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      this.alert.show('success', this.strings.tips?.success!, 2000)
       this.$submit.classList.remove('feedback-submit-loading')
       setTimeout(this.hide, 2000)
       setTimeout(this.clear, 2300)
     })
     emitter.on(SUBMIT_FAIL_EVENT, () => {
-      this.alert.show('error', '提交失败，请稍后重试')
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      this.alert.show('error', this.strings.tips?.fail!)
       this.$submit.classList.remove(
         'feedback-submit-disabled',
         'feedback-submit-loading'
@@ -226,7 +231,8 @@ export default class Modal {
 
   handleSubmit = (): void => {
     if (!this.$input.value) {
-      return this.alert.show('error', '请填写意见或建议')
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      return this.alert.show('error', this.strings.tips?.noMessage!)
     }
     emitter.emit(MODAL_SUBMIT_EVENT, {
       files: this.images,
