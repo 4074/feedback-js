@@ -13,7 +13,7 @@ function getValueFromArgs(name, args) {
     }
   }
 }
-const defaultServer = getValueFromArgs(
+const DefaultServer = getValueFromArgs(
   'server',
   JSON.parse(process.env.npm_config_argv)
 ) || ''
@@ -27,7 +27,7 @@ module.exports = (env = {}) => ({
 
   output: {
     filename: env.production && env.version ? `[name]-${packageJson.version}-[contenthash:8].js` : '[name].js',
-    path: path.resolve(__dirname, 'build')
+    path: env.output || path.resolve(__dirname, 'build')
   },
 
   devtool: env.production ? 'cheap-source-map' : 'inline-source-map',
@@ -74,7 +74,10 @@ module.exports = (env = {}) => ({
 
   plugins: [
     new webpack.DefinePlugin({
-      DefaultServer: JSON.stringify(defaultServer),
+      DefaultServer: JSON.stringify(DefaultServer),
+      CustomDefaultOption: env.CustomDefaultOption ? Buffer.from(env.CustomDefaultOption, 'base64').toString() : JSON.stringify({}),
+      AutoSetup: JSON.stringify(env.AutoSetup || false),
+      AppId: JSON.stringify(env.AppId || '')
     }),
     new HtmlWebpackPlugin({
       template: 'index.html',

@@ -3,7 +3,7 @@
 ## 使用
 引入 Javascript 文件
 ```html
-<script type="text/javascript" src="https://some-host.com/js/feedback.js"></script>
+<script defer type="text/javascript" src="https://some-host.com/js/feedback.js"></script>
 ```
 
 Javascript 代码中进行初始化
@@ -12,11 +12,11 @@ Javascript 代码中进行初始化
 Feedback.init(appId, options)
 
 // 可以设置当前用户，提交时会带上这个信息，字符串类型
-Feedback.user('东子') // 设置用户
+Feedback.user('赵子龙') // 设置用户
 Feedback.user() // 获取当前的用户：东子
 
 // 也可以设置额外数据
-Feedback.setData('alias', '东哥') // 设置
+Feedback.setData('alias', '赵云') // 设置
 Feedback.getData('alias') // 获取
 ```
 
@@ -26,6 +26,7 @@ Feedback.getData('alias') // 获取
 ```typescript
 const defaults: FeedbackOptions = {
   // 接收数据的接口，默认为空
+  // 需要自行实现接收接口
   server: '',
 
   // 可调整的样式
@@ -64,8 +65,8 @@ const defaults: FeedbackOptions = {
 
 ```bash
 # 开发，可传入默认的接收数据接口
-npm start --server=http://your-host.com/receive-feedback-data
+yarn start --server=http://your-host.com/receive-feedback-data
 
 # 构建，可传入默认的接收数据接口
-npm run build --server=http://your-host.com/receive-feedback-data
+yarn build --server=http://your-host.com/receive-feedback-data
 ```

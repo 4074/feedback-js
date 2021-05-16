@@ -1,5 +1,8 @@
 declare module '*.svg'
 declare const DefaultServer: string
+declare const CustomDefaultOption: Record<string, any>
+declare const AutoSetup: boolean
+declare const AppId: string
 
 declare type StringKeyObj<T> = {
   [key in string]: T

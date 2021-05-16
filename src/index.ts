@@ -11,33 +11,37 @@ export const SUBMIT_FAIL_EVENT = 'SUBMIT_FAIL_EVENT'
 
 const USER_STORAGE_KEY = 'FEEDBACK_USER'
 
-const defaults: FeedbackOptions = {
-  server: DefaultServer,
-  style: {
-    primaryColor: '#1890ff',
-    bottom: 48,
-    right: 48,
-    size: 48
+const defaults: FeedbackOptions = deepExtends(
+  {
+    server: DefaultServer,
+    style: {
+      primaryColor: '#1890ff',
+      bottom: 48,
+      right: 48,
+      size: 48
+    },
+    strings: {
+      title: '意见反馈',
+      submit: '提 交',
+      labels: {
+        input: '您遇到的问题、意见或建议',
+        image: '可附上相关截图（最多添加3张）'
+      },
+      placeholders: {
+        input: '请输入',
+        image: '上传或粘贴图片'
+      },
+      tips: {
+        noMessage: '请填写意见或建议',
+        success: '反馈成功',
+        fail: '提交失败，请稍后重试'
+      },
+      contact: '或者直接联系管理员'
+    }
   },
-  strings: {
-    title: '意见反馈',
-    submit: '提 交',
-    labels: {
-      input: '您遇到的问题、意见或建议',
-      image: '可附上相关截图（最多添加3张）'
-    },
-    placeholders: {
-      input: '请输入',
-      image: '上传或粘贴图片'
-    },
-    tips: {
-      noMessage: '请填写意见或建议',
-      success: '反馈成功',
-      fail: '提交失败，请稍后重试'
-    },
-    contact: '或者直接联系管理员'
-  }
-}
+  // eslint-disable-next-line no-undef
+  CustomDefaultOption
+)
 
 export default class Feedback {
   version = '0.1.0'
@@ -163,4 +167,8 @@ export default class Feedback {
   }
 }
 
-;(window as any).Feedback = new Feedback(window)
+const instance = new Feedback(window)
+;(window as any).Feedback = instance
+
+// eslint-disable-next-line no-undef
+if (AutoSetup) instance.init(AppId)
